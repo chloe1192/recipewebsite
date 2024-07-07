@@ -1,0 +1,26 @@
+<div class="footer">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12 col-md-4">
+                <h1>Categories</h1>
+                <ul class="footer-list">
+                    {% for category in categories %}
+                    <li class="footer-item">{{ category.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <h1>Social media</h1>
+                <ul class="footer-list">
+                    <li class="footer-item"><i class="bi bi-facebook"></i>&nbsp;/thisisawebsite</li>
+                    <li class="footer-item"><i class="bi bi-instagram"></i>&nbsp;@thisisawebsite</li>
+                    <li class="footer-item"><i class="bi bi-twitter"></i>&nbsp;@thisisawebsite</li>
+                    <li class="footer-item"><i class="bi bi-youtube"></i>&nbsp;/thisisawebsite</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>

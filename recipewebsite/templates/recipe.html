@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{ recipe.name_recipe }}{% endblock %}
+{% include "header.html" %}
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-12">
+            <div class="recipe-page-content row">
+                <div class="recipe-dates">
+                    <div class="recipe-date-created">{{recipe.date_created}}</div>
+                    <div class="recipe-date-updated">{{recipe.date_updated}}</div>
+                </div>
+                <div class="recipe-author">
+                    <img class="recipe-author-image">
+                    <div class="recipe-author-name">John Doe</div>
+                </div>
+                <img
+                    class="full-recipe-photo"
+                    src="{{recipe.img.url}}"
+                    alt="{{recipe.name}}"
+                />
+                <h1 class="recipe- col-12">
+                    {{ recipe.name }}
+                </h1>
+                <div class="recipe-difficulty col-6">
+                    Difficulty&nbsp;
+                    <i class="bi {% if recipe.difficulty >= 1 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                    <i class="bi {% if recipe.difficulty >= 2 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                    <i class="bi {% if recipe.difficulty >= 3 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                    <i class="bi {% if recipe.difficulty >= 4 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                    <i class="bi {% if recipe.difficulty >= 5 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                </div>
+                <div class="recipe-duration col-6"><i class="bi bi-clock"></i> {{ recipe.duration }} Minutes</div>
+                <div class="recipe-description col-12">{{ recipe.description }}</div>
+                <ul class="recipe-content-list">
+                    {% for note in notes %}
+                    <li class="recipe-content-item">{{note.content}}</li>
+                    {% endfor %}
+                </ul>
+                <div class="recipe-ingredients">
+                    <ul>
+                        {% for ingredient in ingredients.all %}
+                        <li class="ingredient-item">{{ ingredient.ingredient.name }}: {{ ingredient.quantity }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="recipe-steps">
+                    <ul class="recipe-steps-list">
+                        {% for step in steps %}
+                        <li class="recipe-steps-item">{{ step.sequence }} .{{ step.text }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
