@@ -13,7 +13,9 @@
                 </div>
                 <div class="recipe-author">
                     <img class="recipe-author-image">
-                    <div class="recipe-author-name">John Doe</div>
+                    <div class="recipe-author-name">
+                        <a href="{% url 'profile_page' recipe.creator.id %}">{{recipe.creator}}</a>
+                    </div>
                 </div>
                 <img
                     class="full-recipe-photo"
@@ -31,7 +33,9 @@
                     <i class="bi {% if recipe.difficulty >= 4 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                     <i class="bi {% if recipe.difficulty >= 5 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                 </div>
-                <div class="recipe-duration col-6"><i class="bi bi-clock"></i> {{ recipe.duration }} Minutes</div>
+                <div class="recipe-duration col-6">
+                    <i class="bi bi-clock"></i> {{ recipe.duration }} Minutes
+                </div>
                 <div class="recipe-description col-12">{{ recipe.description }}</div>
                 <ul class="recipe-content-list">
                     {% for note in notes %}

@@ -22,10 +22,18 @@ from django.conf import settings
 
 app_name = "recipewebsite"
 urlpatterns = [
+    path('login/', views.loginPage, name='login'),
+    path('register/', views.registerUser, name='register'),
+    path('logout/', views.logoutUser, name='logout'),
+    # front
     path("", views.index, name="index"),
     path("<int:pk>/category", views.category, name="category"),
-    path("<int:pk>/recipe", views.recipe, name="recipe"),
-    path('admin/', admin.site.urls),
+    path("<int:pk>/recipe/", views.recipe, name="recipe"),
+    path('create_recipe/', views.createRecipe),
+    #user
+    path('profile/<str:pk>/', views.userProfile, name='profile_page'),
+    #admin panel
+    path('admin/', admin.site.urls, name='create_recipe'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

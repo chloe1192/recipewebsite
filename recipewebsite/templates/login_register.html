@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class="row">
+        {% if page == 'login' %}
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="input-group">
+                <label class="form-label" for="username">Username</label>
+                <input class="form-input" type="text" name="username" placeholder="Type your username"/>
+            </div>
+        
+            <div class="input-group">
+                <label class="form-label" for="password">Password</label>
+                <input class="form-input" type="password" name="password" placeholder="Type your password"/>
+            </div>
+        
+            <button class="btn btn-primary" type="submit">Login</button>
+            <a href="{% url 'register' %}">Create account</a>
+        </form>
+        {% elif page == 'register' %}
+        <form method="POST" action="">
+            {% for field in form %}
+            <div class="form-group">
+                <label for="room_name">{{field.label}}</label>
+                {{field}}
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit">Register</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
