@@ -30,8 +30,9 @@ urlpatterns = [
     path("<int:pk>/category", views.category, name="category"),
     path("<int:pk>/recipe/", views.recipe, name="recipe"),
     path('create_recipe/', views.createRecipe),
+    path('profile/<int:pk>', views.userProfile, name='profile_page'),
     #user
-    path('profile/<str:pk>/', views.userProfile, name='profile_page'),
+    path('my_profile/', views.myUserProfile, name='my_profile_page'),
     #admin panel
     path('admin/', admin.site.urls, name='create_recipe'),
 ]

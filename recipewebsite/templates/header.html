@@ -1,5 +1,5 @@
 <header>
-    <nav class="navbar navbar-expand-lg ">
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
         <a class="navbar-brand" href="{% url 'index' %}">
             <img src="static/logo.png" alt="Branding">
         </a>
@@ -16,7 +16,7 @@
             {% endfor %}
                     {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#profile_page">
+                        <a class="nav-link" href="{% url 'my_profile_page' %}">
                             <i class="bi bi-person"></i> {{ request.user.username }}
                         </a>
                     </li>

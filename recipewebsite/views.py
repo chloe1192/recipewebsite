@@ -4,14 +4,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .forms import CreateRecipeForm, CustomUserCreationForm
-from .models import Category, Recipe, Note, PreparationStep, Ingredient, RecipeIngredient
+from .models import Category, ProfileUser, Recipe, Note, PreparationStep, Ingredient, RecipeIngredient
 from django.contrib.auth.models import User
 
 def index(request):
-    categories = Category.objects.all()
+    category_list = Category.objects.all()
     recipes = Recipe.objects.all()
     context = {
-            "categories":categories,
+            "categories":category_list,
             "recipes":recipes
         }
     return render(request, "index.html", context)
@@ -46,6 +46,7 @@ def recipe(request, pk):
 
 @login_required(login_url='/login')
 def createRecipe(request):
+    category_list = Category.objects.all()
     form = CreateRecipeForm()
     if request.method == 'POST':
         form = CreateRecipeForm(request.POST)
@@ -53,10 +54,14 @@ def createRecipe(request):
             form.save()
             return redirect('index')
 
-    context = {'form': form}
+    context = {
+        "categories": category_list,
+        'form': form
+        }
     return render(request, 'create_recipe.html', context)
 
 def loginPage(request):
+    category_list = Category.objects.all()
     page = 'login'
     if request.user.is_authenticated:
         return redirect('index')
@@ -79,11 +84,13 @@ def loginPage(request):
             messages.error(request, 'User or pass does not match')
 
     context = {
+        "categories": category_list,
         'page': page
     }
     return render(request, 'login_register.html', context)
 
 def registerUser(request):
+    category_list = Category.objects.all()
     page = 'register'
     form = CustomUserCreationForm()
     if request.method == 'POST':
@@ -97,6 +104,7 @@ def registerUser(request):
         else:
             messages.error(request, 'An error occured, check all fields')
     context = {
+        "categories": category_list,
         'form': form,
         'page': page
     }
@@ -107,9 +115,27 @@ def logoutUser(request):
     return redirect('index')
 
 @login_required(login_url='/login')
-def userProfile(request, pk):
-    user = User.objects.get(id=pk)
+def myUserProfile(request):
+    category_list = Category.objects.all()
+    if request.user.is_authenticated:
+        user = User.objects.get(id=request.user.id)
     context = {
+        "categories": category_list,
         'user': user
+    }
+    return render(request, 'my_profile.html', context)
+    
+def userProfile(request, pk):
+    category_list = Category.objects.all()
+    if request.user.is_authenticated:
+        if request.user.id == pk:
+            return redirect('my_profile_page')
+
+    user = User.objects.get(pk=pk)
+    profile = ProfileUser.objects.get(pk=pk)
+    context = {
+        'categories': category_list,
+        'user': user,
+        'profile': profile
     }
     return render(request, 'profile.html', context)

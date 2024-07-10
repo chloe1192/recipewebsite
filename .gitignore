@@ -159,3 +159,9 @@ media/
 
 # Database migrations
 migrations/
+
+# scss cache
+CACHE/
+
+# vs code debugger
+launch.json

@@ -1,6 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class ProfileUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
+    bio = models.TextField(null=True)
+    city = models.CharField(max_length=255, null=True)
+    phone = models.CharField(max_length=255, null=True)
+    
+    def __str__(self):
+        return self.user.username
+
 class Category(models.Model):
     name = models.CharField(max_length=255)
 
@@ -56,8 +66,11 @@ class Note(models.Model):
         return self.content
 
 class SocialMedia(models.Model):
-    icon = models.ForeignKey(Icons, on_delete=models.RESTRICT)
-    link = models.CharField(max_length=255)
+    social_name = models.CharField(max_length=255, null=True)
+    profile_name = models.CharField(max_length=255, null=True)
+    icon = models.ForeignKey(Icons, on_delete=models.RESTRICT, null=True)
+    link = models.CharField(max_length=255, null=True)
+    user = models.ForeignKey(ProfileUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.link

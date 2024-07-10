@@ -3,21 +3,23 @@
 
 <div class="container">
 
-    <div class="row">
+    <div class="row text-center">
         {% if page == 'login' %}
-        <form method="POST" action="">
+        <form class="form-signin" method="POST" action="">
             {% csrf_token %}
-            <div class="input-group">
-                <label class="form-label" for="username">Username</label>
-                <input class="form-input" type="text" name="username" placeholder="Type your username"/>
+            <div class="form-group col-12">
+                <label class="sr-only" for="username">Username</label>
+                <input class="form-input form-control" type="text" name="username" placeholder="Type your username"/>
             </div>
         
-            <div class="input-group">
-                <label class="form-label" for="password">Password</label>
-                <input class="form-input" type="password" name="password" placeholder="Type your password"/>
+            <div class="form-group">
+                <label class="sr-only" for="password">Password</label>
+                <input class="form-input form-control" type="password" name="password" placeholder="Type your password"/>
             </div>
-        
-            <button class="btn btn-primary" type="submit">Login</button>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Login</button>
+            </div>
+            
             <a href="{% url 'register' %}">Create account</a>
         </form>
         {% elif page == 'register' %}
