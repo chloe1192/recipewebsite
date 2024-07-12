@@ -115,7 +115,7 @@ def logoutUser(request):
     return redirect('index')
 
 @login_required(login_url='/login')
-def myUserProfile(request):
+def userAccount(request):
     category_list = Category.objects.all()
     if request.user.is_authenticated:
         user = User.objects.get(id=request.user.id)
@@ -123,13 +123,13 @@ def myUserProfile(request):
         "categories": category_list,
         'user': user
     }
-    return render(request, 'my_profile.html', context)
+    return render(request, 'account.html', context)
     
 def userProfile(request, pk):
     category_list = Category.objects.all()
     if request.user.is_authenticated:
         if request.user.id == pk:
-            return redirect('my_profile_page')
+            return redirect('account')
 
     user = User.objects.get(pk=pk)
     profile = ProfileUser.objects.get(pk=pk)

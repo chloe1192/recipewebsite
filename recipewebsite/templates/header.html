@@ -16,7 +16,7 @@
             {% endfor %}
                     {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'my_profile_page' %}">
+                        <a class="nav-link" href="{% url 'account' %}">
                             <i class="bi bi-person"></i> {{ request.user.username }}
                         </a>
                     </li>
