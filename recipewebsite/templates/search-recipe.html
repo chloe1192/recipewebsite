@@ -1,14 +1,15 @@
 {% extends "base.html" %}
-{% block title %}This is the index{% endblock %}
+{% block title %}Search for {{ searched }}{% endblock %}
 {% include "header.html" %}
 {% block content %}
-{% load static %}
 <div class="container">
     <div class="row">
 
+        <div class="col-12">
         {% for recipe in recipes %}
         {% include 'recipe-card.html' %}
         {% endfor %}
+        </div>
 
     </div>
 </div>

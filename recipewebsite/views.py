@@ -13,9 +13,9 @@ def search_recipes(request):
         recipes = Recipe.objects.filter(name__icontains=searched)
         context = {
             'searched': searched,
-            'items' : recipes
+            'recipes' : recipes
         }
-    return render(request, 'search.html', context)
+    return render(request, 'search-recipe.html', context)
 
 def index(request):
     category_list = Category.objects.all()
