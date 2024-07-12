@@ -1,12 +1,5 @@
-{% extends 'base.html' %} {% block content %}
-<div class="container">
-	<div class="row">
-		<div class="col-12">
-			{{ user.username }} {{ user.email }}  {{
-			user.first_name }}
-		</div>
-	</div>
-</div>
+{% extends 'base.html' %}
+{% block content %}
 
 <section style="background-color: #eee">
 	<div class="container py-5">
@@ -32,7 +25,7 @@
 				<div class="card mb-4">
 					<div class="card-body text-center">
 						<img
-							src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+							src="{{ user.avatar.url }}"
 							alt="avatar"
 							class="rounded-circle img-fluid"
 							style="width: 150px"
@@ -63,36 +56,18 @@
 				<div class="card mb-4 mb-lg-0">
 					<div class="card-body p-0">
 						<ul class="list-group list-group-flush rounded-3">
+							{% for social in socials %}
 							<li
 								class="list-group-item d-flex justify-content-between align-items-center p-3"
 							>
 								<i class="fas fa-globe fa-lg text-warning"></i>
-								<p class="mb-0">https://mdbootstrap.com</p>
+								<p class="mb-0">
+									<a href="{{ social.link }}">
+										<i class="{{ social.icon.html_class }}"></i>
+										{{ social.profile_name }}</a>
+								</p>
 							</li>
-							<li
-								class="list-group-item d-flex justify-content-between align-items-center p-3"
-							>
-								<i class="fab fa-github fa-lg text-body"></i>
-								<p class="mb-0">mdbootstrap</p>
-							</li>
-							<li
-								class="list-group-item d-flex justify-content-between align-items-center p-3"
-							>
-								<i class="fab fa-twitter fa-lg" style="color: #55acee"></i>
-								<p class="mb-0">@mdbootstrap</p>
-							</li>
-							<li
-								class="list-group-item d-flex justify-content-between align-items-center p-3"
-							>
-								<i class="fab fa-instagram fa-lg" style="color: #ac2bac"></i>
-								<p class="mb-0">mdbootstrap</p>
-							</li>
-							<li
-								class="list-group-item d-flex justify-content-between align-items-center p-3"
-							>
-								<i class="fab fa-facebook-f fa-lg" style="color: #3b5998"></i>
-								<p class="mb-0">mdbootstrap</p>
-							</li>
+							{% endfor %}
 						</ul>
 					</div>
 				</div>
@@ -126,7 +101,7 @@
 								<p class="mb-0">City</p>
 							</div>
 							<div class="col-sm-9">
-								<p class="text-muted mb-0"> {{ profile.city }} </p>
+								<p class="text-muted mb-0"> {{ user.city }} </p>
 							</div>
 						</div>
 

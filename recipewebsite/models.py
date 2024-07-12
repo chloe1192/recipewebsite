@@ -9,7 +9,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=200, null=True, unique="True")
     email = models.EmailField(unique=True)
     bio = models.TextField(null=True)
-    avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
+    avatar = models.ImageField(default='default.png', upload_to='profile_images')
     bio = models.TextField(null=True)
     city = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=255, null=True)
@@ -30,8 +30,11 @@ class Ingredient(models.Model):
         return self.name
 
 class Icons(models.Model):
-    icon_name = models.CharField(max_length=255)
-    icon_class = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    html_class = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
     
 class Recipe(models.Model):
     name = models.CharField(max_length=255)

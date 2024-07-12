@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .forms import CreateRecipeForm, CustomUserCreationForm
-from .models import Category, Recipe, Note, PreparationStep, Ingredient, RecipeIngredient
+from .models import Category, Recipe, Note, PreparationStep, Ingredient, RecipeIngredient, SocialMedia
 from .models import User
 
 def search_recipes(request):
@@ -130,9 +130,11 @@ def userAccount(request):
     category_list = Category.objects.all()
     if request.user.is_authenticated:
         user = User.objects.get(id=request.user.id)
+        socials = SocialMedia.objects.filter(user=request.user.id)
     context = {
         "categories": category_list,
-        'user': user
+        'user': user,
+        'socials': socials
     }
     return render(request, 'account.html', context)
     
