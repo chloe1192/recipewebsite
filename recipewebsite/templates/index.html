@@ -7,25 +7,27 @@
     <div class="row">
 
         {% for recipe in recipes %}
-        <div class="card col-12 col-lg-4 recipe-card">
-            <div class="row">
-                <img 
-                    class="recipe-photo"
-                    src="{{ recipe.img.url }}" 
-                    alt="Image of {{ recipe.name }}"
-                />
-                <h1 class="recipe-title"><a href="{% url 'recipe' recipe.id %}">{{ recipe.name }}</a></h1>
-                <div class="recipe-difficulty">
-                    Difficulty
-                    <br>
-                    <i class="bi {% if recipe.difficulty >= 1 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                    <i class="bi {% if recipe.difficulty >= 2 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                    <i class="bi {% if recipe.difficulty >= 3 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                    <i class="bi {% if recipe.difficulty >= 4 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                    <i class="bi {% if recipe.difficulty >= 5 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                </div>
-                <div class="recipe-duration">
-                    <i class="bi bi-clock"></i>{{ recipe.duration }} Minutes
+        <div class="col-12 col-lg-4">
+            <div class="card recipe-card px-1">
+                <div class="row">
+                    <img 
+                        class="recipe-photo"
+                        src="{{ recipe.img.url }}" 
+                        alt="Image of {{ recipe.name }}"
+                    />
+                    <h1 class="recipe-title"><a href="{% url 'recipe' recipe.id %}">{{ recipe.name }}</a></h1>
+                    <div class="recipe-difficulty">
+                        Difficulty
+                        <br>
+                        <i class="bi {% if recipe.difficulty >= 1 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                        <i class="bi {% if recipe.difficulty >= 2 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                        <i class="bi {% if recipe.difficulty >= 3 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                        <i class="bi {% if recipe.difficulty >= 4 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                        <i class="bi {% if recipe.difficulty >= 5 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                    </div>
+                    <div class="recipe-duration">
+                        <i class="bi bi-clock"></i>{{ recipe.duration }} Minutes
+                    </div>
                 </div>
             </div>
         </div>

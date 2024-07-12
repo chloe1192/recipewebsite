@@ -7,6 +7,16 @@ from .forms import CreateRecipeForm, CustomUserCreationForm
 from .models import Category, Recipe, Note, PreparationStep, Ingredient, RecipeIngredient
 from .models import User
 
+def search_recipes(request):
+    if request.method == 'POST':
+        searched = request.POST['search-recipes']
+        recipes = Recipe.objects.filter(name__icontains=searched)
+        context = {
+            'searched': searched,
+            'items' : recipes
+        }
+    return render(request, 'search.html', context)
+
 def index(request):
     category_list = Category.objects.all()
     recipes = Recipe.objects.all()

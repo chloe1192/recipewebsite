@@ -35,7 +35,7 @@ class Icons(models.Model):
     
 class Recipe(models.Model):
     name = models.CharField(max_length=255)
-    img = models.ImageField(upload_to="recipes",null=True)
+    img = models.ImageField(upload_to="recipes",null=True,default='default.jpg',)
     difficulty = models.IntegerField(null=True)
     duration = models.IntegerField(null=True)
     description = models.TextField(null=True)
