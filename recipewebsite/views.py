@@ -4,8 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .forms import CreateRecipeForm, CustomUserCreationForm
-from .models import Category, ProfileUser, Recipe, Note, PreparationStep, Ingredient, RecipeIngredient
-from django.contrib.auth.models import User
+from .models import Category, Recipe, Note, PreparationStep, Ingredient, RecipeIngredient
+from .models import User
 
 def index(request):
     category_list = Category.objects.all()
@@ -92,7 +92,7 @@ def loginPage(request):
 def registerUser(request):
     category_list = Category.objects.all()
     page = 'register'
-    form = CustomUserCreationForm()
+    profile_form = CustomUserCreationForm()
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -106,6 +106,7 @@ def registerUser(request):
     context = {
         "categories": category_list,
         'form': form,
+        'profile_form': profile_form,
         'page': page
     }
     return render(request, 'login_register.html', context)
@@ -132,7 +133,7 @@ def userProfile(request, pk):
             return redirect('account')
 
     user = User.objects.get(pk=pk)
-    profile = ProfileUser.objects.get(pk=pk)
+    profile = User.objects.get(pk=pk)
     context = {
         'categories': category_list,
         'user': user,

@@ -24,7 +24,7 @@
         </form>
         {% elif page == 'register' %}
         <form method="POST" action="">
-            {% for field in form %}
+            {% for field in user_form %}
             <div class="form-group">
                 <label for="room_name">{{field.label}}</label>
                 {{field}}

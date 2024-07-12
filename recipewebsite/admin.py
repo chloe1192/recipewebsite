@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Ingredient, PreparationStep, Recipe, Note, RecipeIngredient, ProfileUser
+from .models import Category, Ingredient, PreparationStep, Recipe, Note, RecipeIngredient, User
 
 class NoteInLine(admin.StackedInline):
     model = Note
@@ -30,4 +30,4 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Note, NoteAdmin)
 admin.site.register(Ingredient)
-admin.site.register(ProfileUser)
+admin.site.register(User)

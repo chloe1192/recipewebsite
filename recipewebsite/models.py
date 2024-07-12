@@ -1,15 +1,21 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-class ProfileUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class User(AbstractUser):
+    first_name = models.CharField(max_length=150, null=True)
+    last_name = models.CharField(max_length=150, null=True)
+    username = models.CharField(max_length=200, null=True, unique="True")
+    email = models.EmailField(unique=True)
+    bio = models.TextField(null=True)
     avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
     bio = models.TextField(null=True)
     city = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=255, null=True)
-    
-    def __str__(self):
-        return self.user.username
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -70,7 +76,7 @@ class SocialMedia(models.Model):
     profile_name = models.CharField(max_length=255, null=True)
     icon = models.ForeignKey(Icons, on_delete=models.RESTRICT, null=True)
     link = models.CharField(max_length=255, null=True)
-    user = models.ForeignKey(ProfileUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.link
