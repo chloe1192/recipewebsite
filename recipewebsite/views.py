@@ -103,6 +103,7 @@ def registerUser(request):
     category_list = Category.objects.all()
     page = 'register'
     profile_form = CustomUserCreationForm()
+    form = ""
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():

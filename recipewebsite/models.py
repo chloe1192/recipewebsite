@@ -8,14 +8,13 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150, null=True)
     username = models.CharField(max_length=200, null=True, unique="True")
     email = models.EmailField(unique=True)
-    bio = models.TextField(null=True)
+    bio = models.TextField(null=True, default=None)
     avatar = models.ImageField(default='default.png', upload_to='profile_images')
-    bio = models.TextField(null=True)
-    city = models.CharField(max_length=255, null=True)
-    phone = models.CharField(max_length=255, null=True)
+    city = models.CharField(max_length=255, null=True, default=None)
+    phone = models.CharField(max_length=255, null=True, default=None)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['first_name',  'password']
 
 class Category(models.Model):
     name = models.CharField(max_length=255)

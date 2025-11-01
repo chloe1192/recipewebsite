@@ -7,6 +7,14 @@
         {% if page == 'login' %}
         <form class="form-signin" method="POST" action="">
             {% csrf_token %}
+            {% for message in messages %}
+    
+                <div class="alert alert-success">
+                    <a class="close" href="#" data-dismiss="alert">×</a>
+                    {{ message }}
+                </div>
+
+            {% endfor %}
             <div class="form-group col-12">
                 <label class="sr-only" for="username">Username</label>
                 <input class="form-input form-control" type="text" name="username" placeholder="Type your username"/>
@@ -19,12 +27,14 @@
             <div class="form-group">
                 <button class="btn btn-primary" type="submit">Login</button>
             </div>
+
             
             <a href="{% url 'register' %}">Create account</a>
         </form>
         {% elif page == 'register' %}
         <form method="POST" action="">
-            {% for field in user_form %}
+            {% csrf_token %}
+            {% for field in profile_form %}
             <div class="form-group">
                 <label for="room_name">{{field.label}}</label>
                 {{field}}

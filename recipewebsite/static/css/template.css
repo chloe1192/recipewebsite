@@ -22,6 +22,15 @@ ul li {
     background-color: #d3d3ec;
     padding: 15px;
 }
+.navbar .search-input {
+    float: left;
+    width: 70%;
+}
+
+.navbar .search-button {
+    float: left;
+    width: 30%;
+}
 
 /* footer */
 .footer {
