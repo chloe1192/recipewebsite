@@ -8,10 +8,12 @@ from .models import Category, Recipe, Note, PreparationStep, Ingredient, RecipeI
 from .models import User
 
 def search_recipes(request):
+    category_list = Category.objects.all()
     if request.method == 'POST':
         searched = request.POST['search-recipes']
         recipes = Recipe.objects.filter(name__icontains=searched)
         context = {
+            "categories":category_list,
             'searched': searched,
             'recipes' : recipes
         }

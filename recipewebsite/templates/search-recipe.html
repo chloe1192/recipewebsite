@@ -3,14 +3,15 @@
 {% include "header.html" %}
 {% block content %}
 <div class="container">
-    <div class="row">
+    <ul class="row">
+        {% if recipes|length == 0 %}
+            <h1 class="empty-list-warning">The search found no result</h1>
+        {% endif %}
 
-        <div class="col-12">
         {% for recipe in recipes %}
         {% include 'recipe-card.html' %}
         {% endfor %}
-        </div>
 
-    </div>
+    </ul>
 </div>
 {% endblock %}
