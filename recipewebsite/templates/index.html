@@ -3,6 +3,29 @@
 {% include "header.html" %}
 {% block content %}
 {% load static %}
+<div class="container-fluid px-0 mb-3">
+    <div class="">
+        <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+                {% for recipe in recipes %}
+                    {% if recipe.category.id == 6 %}
+                    <div class="carousel-item active">
+                        <img src="{{ recipe.img.url }}" class="d-block w-100" alt="...">
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div>
 <div class="container">
     <div class="row">
 
