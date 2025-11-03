@@ -20,14 +20,14 @@
                         </a>
                     </div>
                 </div>
-                <img
-                    class="full-recipe-photo"
-                    src="{{recipe.img.url}}"
-                    alt="{{recipe.name}}"
-                />
-                <h1 class="recipe- col-12">
+                <h1 class="recipe-title col-12">
                     {{ recipe.name }}
                 </h1>
+                <img
+                    class="full-recipe-photo"
+                    src="{{recipe.sliderImg.url}}"
+                    alt="{{recipe.name}}"
+                />
                 <div class="recipe-difficulty col-6">
                     Difficulty&nbsp;
                     <i class="bi {% if recipe.difficulty >= 1 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
@@ -47,15 +47,17 @@
                 </ul>
                 <div class="recipe-ingredients">
                     <ul>
+                        <h3>Ingredients</h3>
                         {% for ingredient in ingredients.all %}
-                        <li class="ingredient-item">{{ ingredient.ingredient.name }}: {{ ingredient.quantity }}</li>
+                        <li class="ingredient-item">{{ ingredient.text }}</li>
                         {% endfor %}
                     </ul>
                 </div>
                 <div class="recipe-steps">
                     <ul class="recipe-steps-list">
+                        <h3>Preparation steps</h3>
                         {% for step in steps %}
-                        <li class="recipe-steps-item">{{ step.sequence }} .{{ step.text }}</li>
+                        <li class="recipe-steps-item">{{ step.text }}</li>
                         {% endfor %}
                     </ul>
                 </div>

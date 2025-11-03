@@ -63,7 +63,6 @@ class Recipe(models.Model):
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    ingredient = models.ManyToManyField(Ingredient, through='RecipeIngredient')
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     class Meta:
@@ -85,9 +84,12 @@ class Recipe(models.Model):
         return self.name
 
 class RecipeIngredient(models.Model):
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
+    text = models.TextField()
+    sequence = models.IntegerField()
     recipe = models.ForeignKey(Recipe, on_delete=models.RESTRICT)
-    quantity = models.CharField(max_length=255)
+    
+    def __str__(self):
+        return self.text
 
 class PreparationStep(models.Model):
     text = models.TextField()
