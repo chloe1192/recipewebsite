@@ -7,14 +7,17 @@
     <div class="row">
         <div class="col-12">
             <div class="recipe-page-content row">
-                <div class="recipe-dates">
-                    <div class="recipe-date-created">{{recipe.date_created}}</div>
-                    <div class="recipe-date-updated">{{recipe.date_updated}}</div>
+                <div class="recipe-dates col-6">
+                    <div class="recipe-date-created">Created on {{recipe.date_created|date:"j F Y"}}</div>
+                    <div class="recipe-date-updated">Last edited on {{recipe.date_updated|date:"j F Y"}}</div>
                 </div>
-                <div class="recipe-author">
+                <div class="recipe-author col-6">
                     <img class="recipe-author-image">
                     <div class="recipe-author-name">
-                        <a href="{% url 'profile' recipe.creator.id %}">{{recipe.creator}}</a>
+                        <a href="{% url 'profile' recipe.creator.id %}">
+                            <img src="{{ recipe.creator.avatar.url }}" height="40px" width="40px">
+                            {{recipe.creator.first_name}}
+                        </a>
                     </div>
                 </div>
                 <img

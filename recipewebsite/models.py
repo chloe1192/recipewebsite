@@ -1,7 +1,9 @@
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.forms import ValidationError
 
 class User(AbstractUser):
     first_name = models.CharField(max_length=150, null=True)
@@ -15,6 +17,22 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name',  'password']
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        avatar = Image.open(self.avatar.path)
+        if avatar.size != (512, 512):
+            width, height = avatar.size
+            min_dim = min(width, height)
+            left = (width - min_dim) / 2
+            top = (height - min_dim) / 2
+            right = (width + min_dim) / 2
+            bottom = (height + min_dim) / 2
+            avatar = avatar.crop((left, top, right, bottom))
+            avatar = avatar.resize((512, 512))
+            avatar.save(self.avatar.path)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -38,6 +56,7 @@ class Icons(models.Model):
 class Recipe(models.Model):
     name = models.CharField(max_length=255)
     img = models.ImageField(upload_to="recipes",null=True,default='default.jpg',)
+    sliderImg = models.ImageField(upload_to="recipes",null=True,default='default.jpg',)
     difficulty = models.IntegerField(null=True)
     duration = models.IntegerField(null=True)
     description = models.TextField(null=True)
@@ -49,6 +68,18 @@ class Recipe(models.Model):
 
     class Meta:
         ordering = ['-date_updated', '-date_created']
+
+    def clean(self):
+        super().clean()
+        if self.sliderImg:
+            sliderImg = Image.open(self.sliderImg)
+            if sliderImg.size != (1920, 600):
+                raise ValidationError("Image must be exactly 1980x600 pixels.")
+
+        if self.img:
+            img = Image.open(self.img)
+            if img.size != (800, 400):
+                raise ValidationError("Image must be exactly 800x400 pixels.")
 
     def __str__(self):
         return self.name

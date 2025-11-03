@@ -10,7 +10,7 @@
                 {% for recipe in recipes %}
                     {% if recipe.category.id == 6 %}
                     <div class="carousel-item active">
-                        <img src="{{ recipe.img.url }}" class="d-block w-100" alt="...">
+                        <img src="{{ recipe.sliderImg.url }}" class="d-block w-100" alt="...">
                     </div>
                     {% endif %}
                 {% endfor %}
