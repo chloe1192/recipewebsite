@@ -33,6 +33,7 @@ urlpatterns = [
     #user
     path('account/', views.userAccount, name='account'),
     path('editUser/', views.editUser, name='edit'),
+    path('createRecipe/', views.createRecipe, name='createRecipe'),
     # search
     path('search-recipes/', views.search_recipes, name='search-recipes'),
     #admin panel
