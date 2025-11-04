@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'compressor',
     'location_field.apps.DefaultConfig',
+    'widget_tweaks',
     'recipewebsite'
 ]
 

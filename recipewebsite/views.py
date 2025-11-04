@@ -86,6 +86,8 @@ def editRecipe(request, pk):
         form = CreateRecipeForm(request.POST, instance=recipe)
         ingredientsformset = IngredientsFormSet(request.POST, instance=recipe, prefix='ingredients')
         stepformset = PreparationStepFormSet(request.POST, instance=recipe, prefix='steps')
+        for f in ingredientsformset.forms + stepformset.forms:
+            f.empty_permitted = True
         if form.is_valid() and stepformset.is_valid() and ingredientsformset.is_valid():
             form.save()
             ingredientsformset.instance = recipe
