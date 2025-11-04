@@ -8,7 +8,7 @@
         <div id="carouselExample" class="carousel slide">
             <div class="carousel-inner">
                 {% for recipe in recipes %}
-                    {% if recipe.category.id == 6 %}
+                    {% if recipe.is_highlight %}
                     <div class="carousel-item active">
                         <img src="{{ recipe.sliderImg.url }}" class="d-block w-100" alt="...">
                     </div>

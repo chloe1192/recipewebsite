@@ -31,8 +31,8 @@
 							style="width: 150px"
 						/>
 						<h5 class="my-3">{{ user.username }}</h5>
-						<p class="text-muted mb-1">Full Stack Developer</p>
-						<p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
+						<p class="text-muted mb-1">{{ user.bio }}</p>
+						<p class="text-muted mb-4">{{ user.city.city }}</p>
 						<div class="d-flex justify-content-center mb-2">
 							<button
 								type="button"
@@ -81,7 +81,7 @@
 								<p class="mb-0">Full Name</p>
 							</div>
 							<div class="col-sm-9">
-								<p class="text-muted mb-0">{{ user.first_name }} {{ user.last_name }}</p>
+								<p class="text-muted mb-0">{{ user.first_name }} {% if user.last_name %}{{ user.last_name }}{% endif %}</p>
 							</div>
 						</div>
 
@@ -101,7 +101,7 @@
 								<p class="mb-0">City</p>
 							</div>
 							<div class="col-sm-9">
-								<p class="text-muted mb-0"> {{ user.city }} </p>
+								<p class="text-muted mb-0"> {{ user.city.city }} </p>
 							</div>
 						</div>
 

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'compressor',
+    'location_field.apps.DefaultConfig',
     'recipewebsite'
 ]
 
@@ -155,3 +156,10 @@ COMPRESS_ROOT = 'recipewebsite/static/scss/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'recipewebsite.User'
+
+LOCATION_FIELD = {
+    'map.provider': 'openstreetmap',
+    'search.provider': 'nominatim',
+    'map.zoom': 7,
+    'map.center': [20, 0],
+}

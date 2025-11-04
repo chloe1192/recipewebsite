@@ -17,6 +17,9 @@ class SocialMediaInLine(admin.StackedInline):
     model = SocialMedia
     extra = 1
 
+class PlaceInline(admin.StackedInline):
+    model = Place
+
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ["name"]
 
@@ -34,6 +37,10 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'username', 'is_staff']
     inlines = [SocialMediaInLine]
 
+class PlaceAdmin(admin.ModelAdmin):
+    list_display = ["city"]
+    model = Place
+
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Recipe, RecipeAdmin)
@@ -41,3 +48,4 @@ admin.site.register(Note, NoteAdmin)
 admin.site.register(Ingredient)
 admin.site.register(User, UserAdmin)
 admin.site.register(Icons)
+admin.site.register(Place, PlaceAdmin)
