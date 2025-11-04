@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .forms import CreateRecipeForm, CustomUserCreationForm
+from .forms import CreateRecipeForm, CustomUserChangeForm, CustomUserCreationForm
 from .models import Category, Recipe, Note, PreparationStep, Ingredient, RecipeIngredient, SocialMedia
 from .models import User
 
@@ -141,17 +141,17 @@ def userAccount(request):
     }
     return render(request, 'account.html', context)
     
-def userProfile(request, pk):
+def editUser(request):    
     category_list = Category.objects.all()
-    if request.user.is_authenticated:
-        if request.user.id == pk:
-            return redirect('account')
-
-    user = User.objects.get(pk=pk)
-    profile = User.objects.get(pk=pk)
+    page = 'edit'
+    profile_form = CustomUserChangeForm()
+    form = ""
+    user = User.objects.get(id=request.user.id)
     context = {
-        'categories': category_list,
+        "categories": category_list,
+        'form': form,
         'user': user,
-        'profile': profile
+        'profile_form': profile_form,
+        'page': page
     }
-    return render(request, 'profile.html', context)
+    return render(request, 'edit_user.html', context)

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from .models import Recipe
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from .models import User
 
@@ -19,6 +19,20 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add HTML classes to all fields
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({
+                'class': 'form-control',  # Bootstrap example
+                'placeholder': field.label
+            })
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ['email', 'username', 'first_name', 'last_name', 'bio', 'phone']
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Add HTML classes to all fields
