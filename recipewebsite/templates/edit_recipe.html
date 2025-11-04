@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+
+    {{form.as_p}}
+    {{ form.errors }}
+    {{ form.non_field_errors }}
+    {% for message in messages %}
+        <div class="alert alert-danger">
+            <a class="close" href="#" data-dismiss="alert">×</a>
+            {{ message }}
+        </div>
+    {% endfor %}
+      {{ ingredientsformset.management_form  }}
+      <h2>Ingredients</h2>
+      <table>
+        {% for form in ingredientsformset %}
+        <tr>
+            {{ form.id }}
+            <td>{{ form.text }}</td>
+            <td>{{ form.sequence }}</td>
+            <td>
+            {% if form.instance.pk %}
+                {{ form.DELETE }} <label>Excluir</label>
+            {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+      {{ stepformset.management_form  }}
+      <h2>Steps</h2>
+      <table>
+        {% for form in stepformset %}
+        <tr>
+            {{ form.id }}
+            <td>{{ form.text }}</td>
+            <td>{{ form.sequence }}</td>
+            <td>
+            {% if form.instance.pk %}
+                {{ form.DELETE }} <label>Excluir</label>
+            {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" value="submit"/>
+</form>
+
+{% endblock %}

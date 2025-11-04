@@ -1,9 +1,10 @@
-from django.shortcuts import redirect, render
+import pprint
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .forms import CreateRecipeForm, CustomUserChangeForm, CustomUserCreationForm
+from .forms import CreateRecipeForm, CustomUserChangeForm, CustomUserCreationForm, IngredientsFormSet, PreparationStepFormSet
 from .models import Category, Recipe, Note, PreparationStep, Ingredient, RecipeIngredient, SocialMedia
 from .models import User
 
@@ -60,17 +61,54 @@ def recipe(request, pk):
 def createRecipe(request):
     category_list = Category.objects.all()
     form = CreateRecipeForm()
+    formset = IngredientsFormSet(request.POST)
     if request.method == 'POST':
         form = CreateRecipeForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and formset.is_valid():
             form.save()
-            return redirect('index')
-
+            formset.instance = recipe
+            formset.save()
+            return redirect('index', pk=recipe.pk)
+    else:
+        form = CreateRecipeForm()
+        formset = IngredientsFormSet()
     context = {
         "categories": category_list,
-        'form': form
+        'form': form,
+        'formset': formset
         }
     return render(request, 'create_recipe.html', context)
+
+def editRecipe(request, pk):
+    category_list = Category.objects.all()
+    recipe = get_object_or_404(Recipe, pk=pk, creator_id=request.user)
+    if request.method == 'POST':
+        form = CreateRecipeForm(request.POST, instance=recipe)
+        ingredientsformset = IngredientsFormSet(request.POST, instance=recipe, prefix='ingredients')
+        stepformset = PreparationStepFormSet(request.POST, instance=recipe, prefix='steps')
+        if form.is_valid() and stepformset.is_valid() and ingredientsformset.is_valid():
+            form.save()
+            ingredientsformset.instance = recipe
+            ingredientsformset.save()
+            stepformset.instance = recipe
+            stepformset.save()
+            return redirect('recipe', pk=recipe.pk)
+        else:            
+            pprint.pprint(form.errors)
+            pprint.pprint(form.non_field_errors())
+            print("Ingredient errors:", ingredientsformset.errors)
+            print("Step errors:", stepformset.errors)
+    else:
+        form = CreateRecipeForm(instance=recipe)
+        ingredientsformset = IngredientsFormSet(instance=recipe, prefix='ingredients')
+        stepformset = PreparationStepFormSet(instance=recipe, prefix='steps')
+    context = {
+        "categories": category_list,
+        'form': form,
+        'ingredientsformset': ingredientsformset,
+        'stepformset': stepformset
+        }
+    return render(request, 'edit_recipe.html', context)
 
 def loginPage(request):
     category_list = Category.objects.all()
@@ -115,6 +153,7 @@ def registerUser(request):
             login(request, user)
             return redirect('index')
         else:
+            form = CustomUserCreationForm()
             messages.error(request, 'An error occured, check all fields')
     context = {
         "categories": category_list,
@@ -155,3 +194,18 @@ def editUser(request):
         'page': page
     }
     return render(request, 'edit_user.html', context)
+
+def userProfile(request, pk):
+    category_list = Category.objects.all()
+    if request.user.is_authenticated:
+        if request.user.id == pk:
+            return redirect('account')
+
+    user = User.objects.get(pk=pk)
+    profile = User.objects.get(pk=pk)
+    context = {
+        'categories': category_list,
+        'user': user,
+        'profile': profile
+    }
+    return render(request, 'profile.html', context)

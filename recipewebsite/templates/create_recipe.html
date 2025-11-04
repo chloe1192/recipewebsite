@@ -6,6 +6,20 @@
 
     {{form.as_p}}
     <input type="submit" value="submit"/>
+      {{ formset.management_form  }}
+      <table>
+        {% for form in formset %}
+        <tr>
+            <td>{{ form.text }}</td>
+            <td>{{ form.sequence }}</td>
+            <td>
+            {% if form.instance.pk %}
+                {{ form.DELETE }} <label>Excluir</label>
+            {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 </form>
 
 {% endblock %}
