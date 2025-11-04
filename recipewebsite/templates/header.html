@@ -10,7 +10,7 @@
             
             <div class="collapse navbar-collapse" id="navbarTogglerHeader">
                 <ul class="navbar-nav">
-                {% for category in categories %}
+                {% for category in all_categories %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'category' category.id %}">
                         {{category.name}}</a>
                     </li>

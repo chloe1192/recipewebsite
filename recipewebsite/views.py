@@ -9,22 +9,18 @@ from .models import Category, Recipe, Note, PreparationStep, Ingredient, RecipeI
 from .models import User
 
 def search_recipes(request):
-    category_list = Category.objects.all()
     if request.method == 'POST':
         searched = request.POST['search-recipes']
         recipes = Recipe.objects.filter(name__icontains=searched)
         context = {
-            "categories":category_list,
             'searched': searched,
             'recipes' : recipes
         }
     return render(request, 'search-recipe.html', context)
 
 def index(request):
-    category_list = Category.objects.all()
     recipes = Recipe.objects.all()
     context = {
-            "categories":category_list,
             "recipes":recipes
         }
     return render(request, "index.html", context)
@@ -43,13 +39,11 @@ def category(request, pk):
     return render(request, "category.html", context)
 
 def recipe(request, pk):
-    category_list = Category.objects.all()
     recipe = Recipe.objects.get(pk=pk)
     notes = Note.objects.filter(recipe_id=pk)
     steps = PreparationStep.objects.filter(recipe_id=pk).order_by('sequence')
     ingredients = RecipeIngredient.objects.filter(recipe=pk)
     context = {
-        "categories": category_list,
         "recipe": recipe,
         "notes": notes,
         "steps": steps,
@@ -59,7 +53,6 @@ def recipe(request, pk):
 
 @login_required(login_url='/login')
 def createRecipe(request):
-    category_list = Category.objects.all()
     form = CreateRecipeForm()
     formset = IngredientsFormSet(request.POST)
     if request.method == 'POST':
@@ -73,14 +66,12 @@ def createRecipe(request):
         form = CreateRecipeForm()
         formset = IngredientsFormSet()
     context = {
-        "categories": category_list,
         'form': form,
         'formset': formset
         }
     return render(request, 'create_recipe.html', context)
 
 def editRecipe(request, pk):
-    category_list = Category.objects.all()
     recipe = get_object_or_404(Recipe, pk=pk, creator_id=request.user)
     if request.method == 'POST':
         form = CreateRecipeForm(request.POST, instance=recipe)
@@ -95,7 +86,7 @@ def editRecipe(request, pk):
             stepformset.instance = recipe
             stepformset.save()
             return redirect('recipe', pk=recipe.pk)
-        else:            
+        else:
             pprint.pprint(form.errors)
             pprint.pprint(form.non_field_errors())
             print("Ingredient errors:", ingredientsformset.errors)
@@ -105,7 +96,6 @@ def editRecipe(request, pk):
         ingredientsformset = IngredientsFormSet(instance=recipe, prefix='ingredients')
         stepformset = PreparationStepFormSet(instance=recipe, prefix='steps')
     context = {
-        "categories": category_list,
         'form': form,
         'ingredientsformset': ingredientsformset,
         'stepformset': stepformset
@@ -113,11 +103,10 @@ def editRecipe(request, pk):
     return render(request, 'edit_recipe.html', context)
 
 def loginPage(request):
-    category_list = Category.objects.all()
     page = 'login'
     if request.user.is_authenticated:
         return redirect('index')
-    
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -136,13 +125,11 @@ def loginPage(request):
             messages.error(request, 'User or pass does not match')
 
     context = {
-        "categories": category_list,
         'page': page
     }
     return render(request, 'login_register.html', context)
 
 def registerUser(request):
-    category_list = Category.objects.all()
     page = 'register'
     profile_form = CustomUserCreationForm()
     form = ""
@@ -158,7 +145,6 @@ def registerUser(request):
             form = CustomUserCreationForm()
             messages.error(request, 'An error occured, check all fields')
     context = {
-        "categories": category_list,
         'form': form,
         'profile_form': profile_form,
         'page': page
@@ -171,25 +157,21 @@ def logoutUser(request):
 
 @login_required(login_url='/login')
 def userAccount(request):
-    category_list = Category.objects.all()
     if request.user.is_authenticated:
         user = User.objects.get(id=request.user.id)
         socials = SocialMedia.objects.filter(user=request.user.id)
     context = {
-        "categories": category_list,
         'user': user,
         'socials': socials
     }
     return render(request, 'account.html', context)
-    
-def editUser(request):    
-    category_list = Category.objects.all()
+
+def editUser(request):
     page = 'edit'
     profile_form = CustomUserChangeForm()
     form = ""
     user = User.objects.get(id=request.user.id)
     context = {
-        "categories": category_list,
         'form': form,
         'user': user,
         'profile_form': profile_form,
@@ -198,7 +180,6 @@ def editUser(request):
     return render(request, 'edit_user.html', context)
 
 def userProfile(request, pk):
-    category_list = Category.objects.all()
     if request.user.is_authenticated:
         if request.user.id == pk:
             return redirect('account')
@@ -206,7 +187,6 @@ def userProfile(request, pk):
     user = User.objects.get(pk=pk)
     profile = User.objects.get(pk=pk)
     context = {
-        'categories': category_list,
         'user': user,
         'profile': profile
     }
