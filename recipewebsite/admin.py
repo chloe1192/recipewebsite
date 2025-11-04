@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Ingredient, PreparationStep, Recipe, Note, RecipeIngredient, User, SocialMedia, Icons
+from .models import Category, Ingredient, PreparationStep, Recipe, Note, RecipeIngredient, User, SocialMedia, Icons, Place
 
 class NoteInLine(admin.StackedInline):
     model = Note
@@ -31,8 +31,9 @@ class NoteAdmin(admin.ModelAdmin):
         return obj.recipe.name
     
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'first_name', 'last_name']
+    list_display = ['username', 'username', 'is_staff']
     inlines = [SocialMediaInLine]
+
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Recipe, RecipeAdmin)

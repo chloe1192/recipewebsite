@@ -11,6 +11,19 @@ class CreateRecipeForm(ModelForm):
         fields = '__all__'
 
 class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(widget=forms.TextInput(attrs={"class": "form-control"}))
+    first_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}))
+
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name']
+        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add HTML classes to all fields
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({
+                'class': 'form-control',  # Bootstrap example
+                'placeholder': field.label
+            })
