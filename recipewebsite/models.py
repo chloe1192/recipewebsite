@@ -23,6 +23,7 @@ class User(AbstractUser):
     city = models.ForeignKey(Place, null=True, on_delete=models.RESTRICT, blank=True, default=None)
     phone = models.CharField(max_length=255, null=True, default=None, blank=True)
 
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name',  'password']
 
     def save(self, *args, **kwargs):
