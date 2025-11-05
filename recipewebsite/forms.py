@@ -5,7 +5,21 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from .models import User
 
+DIFFICULTY_CHOICES = [
+    (1, 'Very Easy'),
+    (2, 'Easy'),
+    (3, 'Medium'),
+    (4, 'Hard'),
+    (5, 'Very Hard'),
+]
+
 class CreateRecipeForm(ModelForm):
+
+    difficulty = forms.ChoiceField(
+        choices=DIFFICULTY_CHOICES,
+        widget=forms.RadioSelect
+    )
+
     class Meta:
         model = Recipe
         fields = ['name', 'img', 'sliderImg', 'difficulty', 'duration', 'description', 'category']
@@ -51,8 +65,7 @@ IngredientsFormSet = inlineformset_factory(
     RecipeIngredient,
     form=RecipeIngredientForm,
     extra=1,
-    can_delete=True,
-    validate_min=False,
+    can_delete=True
 )
 
 PreparationStepFormSet = inlineformset_factory(
@@ -60,8 +73,7 @@ PreparationStepFormSet = inlineformset_factory(
     PreparationStep,
     form=PreparationStepForm,
     extra=1,
-    can_delete=True,
-    validate_min=False,
+    can_delete=True
 )
 
 

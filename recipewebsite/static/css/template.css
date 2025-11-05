@@ -118,6 +118,28 @@ ul li {
     box-shadow: 3px 3px #eee;
 }
 
+.star-rating {
+    direction: rtl;
+    font-size: 2rem;
+    display: flex;
+}
+
+.start-rating input {
+    display: none;
+}
+
+.star-rating label {
+    color: #ccc;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: gold;
+}
+
 /*
 @media screen and (max-width: 768px) {
 
