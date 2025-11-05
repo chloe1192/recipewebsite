@@ -53,54 +53,87 @@ def recipe(request, pk):
 
 @login_required(login_url='/login')
 def createRecipe(request):
-    form = CreateRecipeForm()
-    formset = IngredientsFormSet(request.POST)
     if request.method == 'POST':
-        form = CreateRecipeForm(request.POST)
-        if form.is_valid() and formset.is_valid():
-            form.save()
-            formset.instance = recipe
-            formset.save()
-            return redirect('index', pk=recipe.pk)
-    else:
-        form = CreateRecipeForm()
-        formset = IngredientsFormSet()
-    context = {
-        'form': form,
-        'formset': formset
-        }
-    return render(request, 'create_recipe.html', context)
+        form = CreateRecipeForm(request.POST, request.FILES)
+        print("form.creator")
+        print(form)
+        # form.creator = request.user
+        ingredients_formset = IngredientsFormSet(request.POST,  prefix='ingredients')
+        steps_formset = PreparationStepFormSet(request.POST, prefix='steps')
+        if form.is_valid() and ingredients_formset.is_valid() and steps_formset.is_valid():
+            recipe = form.save(commit=False)
+            recipe.creator = request.user
+            recipe = form.save()
+            ingredients_formset.instance = recipe
+            ingredients_formset.save()
+            steps_formset.instance = recipe
+            steps_formset.save()
 
-def editRecipe(request, pk):
-    recipe = get_object_or_404(Recipe, pk=pk, creator_id=request.user)
-    if request.method == 'POST':
-        form = CreateRecipeForm(request.POST, instance=recipe)
-        ingredientsformset = IngredientsFormSet(request.POST, instance=recipe, prefix='ingredients')
-        stepformset = PreparationStepFormSet(request.POST, instance=recipe, prefix='steps')
-        for f in ingredientsformset.forms + stepformset.forms:
-            f.empty_permitted = True
-        if form.is_valid() and stepformset.is_valid() and ingredientsformset.is_valid():
-            form.save()
-            ingredientsformset.instance = recipe
-            ingredientsformset.save()
-            stepformset.instance = recipe
-            stepformset.save()
+            messages.success(request, "Recipe created successfully!")
             return redirect('recipe', pk=recipe.pk)
         else:
             pprint.pprint(form.errors)
             pprint.pprint(form.non_field_errors())
-            print("Ingredient errors:", ingredientsformset.errors)
-            print("Step errors:", stepformset.errors)
+            print("Ingredient errors:", ingredients_formset.errors)
+            print("Step errors:", steps_formset.errors)
+            messages.error(request, "There's some errors")
     else:
-        form = CreateRecipeForm(instance=recipe)
-        ingredientsformset = IngredientsFormSet(instance=recipe, prefix='ingredients')
-        stepformset = PreparationStepFormSet(instance=recipe, prefix='steps')
+        form = CreateRecipeForm()
+        ingredients_formset = IngredientsFormSet(prefix='ingredients')
+        steps_formset = PreparationStepFormSet(prefix='steps')
     context = {
         'form': form,
-        'ingredientsformset': ingredientsformset,
-        'stepformset': stepformset
+        'ingredients_formset': ingredients_formset,
+        'steps_formset': steps_formset
         }
     return render(request, 'edit_recipe.html', context)
+
+@login_required(login_url='/login')
+def editRecipe(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk, creator_id=request.user)
+    if request.method == 'POST':
+        form = CreateRecipeForm(request.POST, instance=recipe)
+        ingredients_formset = IngredientsFormSet(request.POST, instance=recipe, prefix='ingredients')
+        steps_formset = PreparationStepFormSet(request.POST, instance=recipe, prefix='steps')
+        for f in ingredients_formset.forms + steps_formset.forms:
+            f.empty_permitted = True
+        if form.is_valid() and steps_formset.is_valid() and ingredients_formset.is_valid():
+            recipe = form.save(commit=False)
+            recipe.creator = request.user
+            recipe = form.save()
+            ingredients_formset.instance = recipe
+            ingredients_formset.save()
+            steps_formset.instance = recipe
+            steps_formset.save()
+            return redirect('recipe', pk=recipe.pk)
+        else:
+            pprint.pprint(form.errors)
+            pprint.pprint(form.non_field_errors())
+            print("Ingredient errors:", ingredients_formset.errors)
+            print("Step errors:", steps_formset.errors)
+    else:
+        form = CreateRecipeForm(instance=recipe)
+        ingredients_formset = IngredientsFormSet(instance=recipe, prefix='ingredients')
+        steps_formset = PreparationStepFormSet(instance=recipe, prefix='steps')
+    context = {
+        'form': form,
+        'ingredients_formset': ingredients_formset,
+        'steps_formset': steps_formset
+        }
+    return render(request, 'edit_recipe.html', context)
+
+@login_required(login_url='/login')
+def delete_recipe(request, pk):
+    recipe = get_object_or_404(Recipe, id=pk)
+
+    if recipe.creator != request.user and request.user.is_staff != True:
+        messages.error(request, "Num foi oce que criou!")
+        return redirect('recipe', pk=pk)
+    
+    if request.method == 'POST':
+        recipe.delete()
+        messages.success(request, "Foi de base")
+        return redirect('index')
 
 def loginPage(request):
     page = 'login'
@@ -131,6 +164,9 @@ def loginPage(request):
 
 def registerUser(request):
     page = 'register'
+    if request.user.is_authenticated:
+        return redirect('index')
+
     profile_form = CustomUserCreationForm()
     form = ""
     if request.method == 'POST':
@@ -160,12 +196,15 @@ def userAccount(request):
     if request.user.is_authenticated:
         user = User.objects.get(id=request.user.id)
         socials = SocialMedia.objects.filter(user=request.user.id)
+        recipes = Recipe.objects.filter(creator=request.user.id)
     context = {
+        'recipes': recipes,
         'user': user,
         'socials': socials
     }
     return render(request, 'account.html', context)
 
+@login_required(login_url='/login')
 def editUser(request):
     page = 'edit'
     profile_form = CustomUserChangeForm()

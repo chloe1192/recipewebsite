@@ -3,207 +3,190 @@
 {% load widget_tweaks %}
 
 <div class="container my-5">
-  <h1 class="mb-4">Edit Recipe</h1>
+	<h1 class="mb-4">{% if form.instance.pk %}Edit Recipe{% else %}Create Recipe{% endif %}</h1>
 
-  <form method="POST" enctype="multipart/form-data" novalidate>
-    {% csrf_token %}
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      {% endfor %}
-    {% endif %}
+	<form method="POST" enctype="multipart/form-data" novalidate>
+		{% csrf_token %}
+		{% if messages %}
+			{% for message in messages %}
+				<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					{{ message }}
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+			{% endfor %}
+		{% endif %}
 
-    <!-- === Main Recipe Form === -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-body">
-        <div class="mb-3">
-          <label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
-          {{ form.name|add_class:"form-control" }}
-          {% if form.name.errors %}
-            <div class="invalid-feedback d-block">{{ form.name.errors|striptags }}</div>
-          {% endif %}
-        </div>
+		<!-- === Main Recipe Form === -->
+		<div class="card mb-4 shadow-sm">
+			<div class="card-body">
+				<div class="mb-3">
+					<label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
+					{{ form.name|add_class:"form-control" }}
+					{% if form.name.errors %}
+						<div class="invalid-feedback d-block">{{ form.name.errors|striptags }}</div>
+					{% endif %}
+				</div>
 
-        <div class="mb-3">
-          <label for="{{ form.img.id_for_label }}" class="form-label">Image</label>
-          {% if form.img.value %}
-            <p>Currently: <a href="{{ form.img.value.url }}">{{ form.img.value.name }}</a></p>
-          {% endif %}
-          {{ form.img|add_class:"form-control" }}
-          {% if form.img.errors %}
-            <div class="invalid-feedback d-block">{{ form.img.errors|striptags }}</div>
-          {% endif %}
-        </div>
+				<div class="mb-3">
+					<label for="{{ form.img.id_for_label }}" class="form-label">Image</label>
+					{% if form.img.value %}
+						<p>Currently: <a href="{{ form.img.value.url }}">{{ form.img.value.name }}</a></p>
+					{% endif %}
+					{{ form.img|add_class:"form-control" }}
+					{% if form.img.errors %}
+						<div class="invalid-feedback d-block">{{ form.img.errors|striptags }}</div>
+					{% endif %}
+				</div>
 
-        <div class="mb-3">
-          <label for="{{ form.sliderImg.id_for_label }}" class="form-label">Slider Image</label>
-          {% if form.sliderImg.value %}
-            <p>Currently: <a href="{{ form.sliderImg.value.url }}">{{ form.sliderImg.value.name }}</a></p>
-          {% endif %}
-          {{ form.sliderImg|add_class:"form-control" }}
-          {% if form.sliderImg.errors %}
-            <div class="invalid-feedback d-block">{{ form.sliderImg.errors|striptags }}</div>
-          {% endif %}
-        </div>
+				<div class="mb-3">
+					<label for="{{ form.sliderImg.id_for_label }}" class="form-label">Slider Image</label>
+					{% if form.sliderImg.value %}
+						<p>Currently: <a href="{{ form.sliderImg.value.url }}">{{ form.sliderImg.value.name }}</a></p>
+					{% endif %}
+					{{ form.sliderImg|add_class:"form-control" }}
+					{% if form.sliderImg.errors %}
+						<div class="invalid-feedback d-block">{{ form.sliderImg.errors|striptags }}</div>
+					{% endif %}
+				</div>
 
-        <div class="mb-3">
-          <label for="{{ form.difficulty.id_for_label }}" class="form-label">Difficulty</label>
-          {{ form.difficulty|add_class:"form-control" }}
-          {% if form.difficulty.errors %}
-            <div class="invalid-feedback d-block">{{ form.difficulty.errors|striptags }}</div>
-          {% endif %}
-        </div>
+				<div class="mb-3">
+					<label for="{{ form.difficulty.id_for_label }}" class="form-label">Difficulty</label>
+					{{ form.difficulty|add_class:"form-control" }}
+					{% if form.difficulty.errors %}
+						<div class="invalid-feedback d-block">{{ form.difficulty.errors|striptags }}</div>
+					{% endif %}
+				</div>
 
-        <div class="mb-3">
-          <label for="{{ form.duration.id_for_label }}" class="form-label">Duration (minutes)</label>
-          {{ form.duration|add_class:"form-control" }}
-          {% if form.duration.errors %}
-            <div class="invalid-feedback d-block">{{ form.duration.errors|striptags }}</div>
-          {% endif %}
-        </div>
+				<div class="mb-3">
+					<label for="{{ form.duration.id_for_label }}" class="form-label">Duration (minutes)</label>
+					{{ form.duration|add_class:"form-control" }}
+					{% if form.duration.errors %}
+						<div class="invalid-feedback d-block">{{ form.duration.errors|striptags }}</div>
+					{% endif %}
+				</div>
 
-        <div class="mb-3">
-          <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
-          {{ form.description|add_class:"form-control" }}
-          {% if form.description.errors %}
-            <div class="invalid-feedback d-block">{{ form.description.errors|striptags }}</div>
-          {% endif %}
-        </div>
+				<div class="mb-3">
+					<label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+					{{ form.description|add_class:"form-control" }}
+					{% if form.description.errors %}
+						<div class="invalid-feedback d-block">{{ form.description.errors|striptags }}</div>
+					{% endif %}
+				</div>
 
-        <div class="mb-3">
-          <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
-          {{ form.category|add_class:"form-select" }}
-          {% if form.category.errors %}
-            <div class="invalid-feedback d-block">{{ form.category.errors|striptags }}</div>
-          {% endif %}
-        </div>
+				<div class="mb-3">
+					<label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+					{{ form.category|add_class:"form-select" }}
+					{% if form.category.errors %}
+						<div class="invalid-feedback d-block">{{ form.category.errors|striptags }}</div>
+					{% endif %}
+				</div>
 
-        <div class="mb-3">
-          <label for="{{ form.creator.id_for_label }}" class="form-label">Creator</label>
-          {{ form.creator|add_class:"form-select" }}
-          {% if form.creator.errors %}
-            <div class="invalid-feedback d-block">{{ form.creator.errors|striptags }}</div>
-          {% endif %}
-        </div>
+			</div>
+		</div>
 
-        <div class="form-check mb-3">
-          {{ form.is_highlight }}
-          <label class="form-check-label" for="{{ form.is_highlight.id_for_label }}">Is Highlight</label>
-          {% if form.is_highlight.errors %}
-            <div class="invalid-feedback d-block">{{ form.is_highlight.errors|striptags }}</div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
+		<!-- === Ingredients === -->
+		<div class="card mb-4 shadow-sm">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				<h4 class="mb-0">Ingredients</h4>
+				<button type="button" id="add-ingredients" class="btn btn-outline-primary btn-sm">
+					<i class="bi bi-plus-lg"></i> Add Ingredient
+				</button>
+			</div>
+			<div class="card-body" id="ingredients-formset">
+				{{ ingredients_formset.management_form }}
+				<table class="table table-bordered align-middle" id="ingredients-table">
+					<thead class="table-light">
+						<tr>
+							<th>Description</th>
+							<th style="width: 120px">Order</th>
+							<th style="width: 100px">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for form in ingredients_formset %}
+							<tr class="sortable-row">
+								{{ form.id }}
+								<td class="handle" style="cursor: grab">⬍ {{ form.text|add_class:"form-control" }}</td>
+								<td>{{ form.sequence|add_class:"form-control"|attr:"readonly:true" }}</td>
+								<td>
+									<button type="button" class="remove-form btn btn-outline-danger btn-sm">
+										<i class="bi bi-trash"></i> Remove
+									</button>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 
-    <!-- === Ingredients === -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Ingredients</h4>
-        <button type="button" id="add-ingredients" class="btn btn-outline-primary btn-sm">
-          <i class="bi bi-plus-lg"></i> Add Ingredient
-        </button>
-      </div>
-      <div class="card-body" id="ingredients-formset">
-        {{ ingredientsformset.management_form }}
-        <table class="table table-bordered align-middle" id="ingredients-table">
-          <thead class="table-light">
-            <tr>
-              <th>Description</th>
-              <th style="width: 120px">Order</th>
-              <th style="width: 100px">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for form in ingredientsformset %}
-              <tr class="sortable-row">
-                {{ form.id }}
-                <td class="handle" style="cursor: grab">⬍ {{ form.text|add_class:"form-control" }}</td>
-                <td>{{ form.sequence|add_class:"form-control" }}</td>
-                <td>
-                  <button type="button" class="remove-form btn btn-outline-danger btn-sm">
-                    <i class="bi bi-trash"></i> Remove
-                  </button>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+				<template id="empty-ingredients-form">
+					<tr class="sortable-row">
+						{{ ingredients_formset.empty_form.id }}
+						<td class="handle" style="cursor: grab">⬍ {{ ingredients_formset.empty_form.text|add_class:"form-control" }}</td>
+						<td>{{ ingredients_formset.empty_form.sequence|add_class:"form-control" }}</td>
+						<td>
+							<button type="button" class="remove-form btn btn-outline-danger btn-sm">
+								<i class="bi bi-trash"></i> Remove
+							</button>
+						</td>
+					</tr>
+				</template>
+			</div>
+		</div>
 
-        <template id="empty-ingredients-form">
-          <tr class="sortable-row">
-            {{ ingredientsformset.empty_form.id }}
-            <td class="handle" style="cursor: grab">⬍ {{ ingredientsformset.empty_form.text|add_class:"form-control" }}</td>
-            <td>{{ ingredientsformset.empty_form.sequence|add_class:"form-control" }}</td>
-            <td>
-              <button type="button" class="remove-form btn btn-outline-danger btn-sm">
-                <i class="bi bi-trash"></i> Remove
-              </button>
-            </td>
-          </tr>
-        </template>
-      </div>
-    </div>
+		<!-- === Steps === -->
+		<div class="card mb-4 shadow-sm">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				<h4 class="mb-0">Steps</h4>
+				<button type="button" id="add-steps" class="btn btn-outline-primary btn-sm">
+					<i class="bi bi-plus-lg"></i> Add Step
+				</button>
+			</div>
+			<div class="card-body" id="steps-formset">
+				{{ steps_formset.management_form }}
+				<table class="table table-bordered align-middle" id="steps-table">
+					<thead class="table-light">
+						<tr>
+							<th>Instruction</th>
+							<th style="width: 120px">Order</th>
+							<th style="width: 100px">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for form in steps_formset %}
+							<tr class="sortable-row">
+								{{ form.id }}
+								<td class="handle" style="cursor: grab">⬍ {{ form.text|add_class:"form-control" }}</td>
+								<td>{{ form.sequence|add_class:"form-control" }}</td>
+								<td>
+									<button type="button" class="remove-form btn btn-outline-danger btn-sm">
+										<i class="bi bi-trash"></i> Remove
+									</button>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 
-    <!-- === Steps === -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Steps</h4>
-        <button type="button" id="add-steps" class="btn btn-outline-primary btn-sm">
-          <i class="bi bi-plus-lg"></i> Add Step
-        </button>
-      </div>
-      <div class="card-body" id="steps-formset">
-        {{ stepformset.management_form }}
-        <table class="table table-bordered align-middle" id="steps-table">
-          <thead class="table-light">
-            <tr>
-              <th>Instruction</th>
-              <th style="width: 120px">Order</th>
-              <th style="width: 100px">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for form in stepformset %}
-              <tr class="sortable-row">
-                {{ form.id }}
-                <td class="handle" style="cursor: grab">⬍ {{ form.text|add_class:"form-control" }}</td>
-                <td>{{ form.sequence|add_class:"form-control" }}</td>
-                <td>
-                  <button type="button" class="remove-form btn btn-outline-danger btn-sm">
-                    <i class="bi bi-trash"></i> Remove
-                  </button>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+				<template id="empty-steps-form">
+					<tr class="sortable-row">
+						{{ steps_formset.empty_form.id }}
+						<td class="handle" style="cursor: grab">⬍ {{ steps_formset.empty_form.text|add_class:"form-control" }}</td>
+						<td>{{ steps_formset.empty_form.sequence|add_class:"form-control" }}</td>
+						<td>
+							<button type="button" class="remove-form btn btn-outline-danger btn-sm">
+								<i class="bi bi-trash"></i> Remove
+							</button>
+						</td>
+					</tr>
+				</template>
+			</div>
+		</div>
 
-        <template id="empty-steps-form">
-          <tr class="sortable-row">
-            {{ stepformset.empty_form.id }}
-            <td class="handle" style="cursor: grab">⬍ {{ stepformset.empty_form.text|add_class:"form-control" }}</td>
-            <td>{{ stepformset.empty_form.sequence|add_class:"form-control" }}</td>
-            <td>
-              <button type="button" class="remove-form btn btn-outline-danger btn-sm">
-                <i class="bi bi-trash"></i> Remove
-              </button>
-            </td>
-          </tr>
-        </template>
-      </div>
-    </div>
-
-    <!-- === Submit === -->
-    <div class="d-flex justify-content-end">
-      <button type="submit" class="btn btn-success btn-lg">
-        <i class="bi bi-save"></i> Save Recipe
-      </button>
-    </div>
-  </form>
+		<!-- === Submit === -->
+		<button type="submit" class="btn btn-success btn-lg">
+			<i class="bi bi-save"></i> {% if form.instance.pk %}Save Recipe{% else %}Create Recipe{% endif %}
+		</button>
+	</form>
 </div>
 
 <!-- === SortableJS === -->
@@ -212,10 +195,15 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  // -----------------------------
-  // Function: Update sequence numbers for a given table
-  // Ensures that the 'sequence' input fields match the row order
-  // -----------------------------
+  // =============================
+  // Grab the main form element
+  // =============================
+  const form = document.querySelector("form");
+
+  // =============================
+  // Function: Update sequence numbers for a table
+  // Why: Ensures that each ingredient or step has the correct order after adding/removing/reordering
+  // =============================
   function updateSequencesForTable(tableSelector) {
     const rows = document.querySelectorAll(`${tableSelector} tbody tr`);
     rows.forEach((row, index) => {
@@ -224,18 +212,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // -----------------------------
-  // Function: Validate an individual textarea field
-  // Adds Bootstrap's 'is-invalid' class and creates error feedback dynamically
-  // Returns true if valid, false if empty
-  // -----------------------------
+  // =============================
+  // Function: Validate a single textarea field
+  // Why: Adds inline feedback if a required field is empty
+  // Returns: true if valid, false if empty
+  // =============================
   function validateField(field) {
     const errorClass = "is-invalid";
-    // Use data-error attribute if present, otherwise default message
-    let errorMessage = field.getAttribute("data-error") || "This field is required.";
+    const errorMessage = field.getAttribute("data-error") || "This field is required.";
     let feedback = field.nextElementSibling;
 
-    // If no invalid-feedback div exists, create it
+    // If no feedback element exists, create one
     if (!feedback || !feedback.classList.contains("invalid-feedback")) {
       feedback = document.createElement("div");
       feedback.className = "invalid-feedback";
@@ -243,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
       field.insertAdjacentElement("afterend", feedback);
     }
 
-    // Check if field is empty
+    // Validate the field value
     if (!field.value.trim()) {
       field.classList.add(errorClass);
       feedback.style.display = "block";
@@ -255,11 +242,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // -----------------------------
-  // Function: Validate all textarea fields in the form
-  // Loops through all textareas with name ending in "text"
-  // Returns false if any are empty
-  // -----------------------------
+  // =============================
+  // Function: Validate all textareas in the form
+  // Loops through all ingredient and step fields
+  // =============================
   function validateAllFields(form) {
     let valid = true;
     form.querySelectorAll('textarea[name$="text"]').forEach(field => {
@@ -268,48 +254,61 @@ document.addEventListener("DOMContentLoaded", () => {
     return valid;
   }
 
-  // -----------------------------
-  // Function: Dynamically add a new form row for a formset
-  // prefix: either "ingredients" or "steps"
-  // Uses a hidden template row (with __prefix__) and updates TOTAL_FORMS
-  // -----------------------------
+  // =============================
+  // Function: Mark empty formset rows for deletion
+  // Why: Django will ignore any form marked for deletion, preventing empty rows from being saved
+  // =============================
+  function removeEmptyRows(prefix) {
+    const rows = document.querySelectorAll(`#${prefix}-table tbody tr`);
+    rows.forEach(row => {
+      const textarea = row.querySelector('textarea[name$="text"]');
+      const deleteInput = row.querySelector('input[name$="DELETE"]');
+      if (textarea && deleteInput && textarea.value.trim() === "") {
+        deleteInput.value = "on"; // Mark the form for deletion
+      }
+    });
+  }
+
+  // =============================
+  // Function: Dynamically add a new formset row
+  // Why: Lets users add more ingredients or steps without refreshing the page
+  // =============================
   function addForm(prefix) {
     const totalForms = document.querySelector(`#id_${prefix}-TOTAL_FORMS`);
     const tableBody = document.querySelector(`#${prefix}-table tbody`);
     const template = document.querySelector(`#empty-${prefix}-form`);
-
     if (!totalForms || !tableBody || !template) return;
 
     const formCount = parseInt(totalForms.value);
-    // Replace the __prefix__ placeholder with the current form index
+    // Replace the __prefix__ placeholder with the new index
     const newFormHtml = template.content.firstElementChild.outerHTML.replace(/__prefix__/g, formCount);
     const tempRow = document.createElement("tr");
     tempRow.innerHTML = newFormHtml;
 
-    // Add real-time validation to newly added textareas
+    // Attach real-time validation to the newly added field
     tempRow.querySelectorAll('textarea[name$="text"]').forEach(field => {
       field.addEventListener("input", () => validateField(field));
     });
 
-    // Append new row to table and increment TOTAL_FORMS
+    // Add the new row to the table and increment the TOTAL_FORMS counter
     tableBody.appendChild(tempRow);
     totalForms.value = formCount + 1;
 
-    // Update sequence numbers after adding
+    // Recalculate sequences after adding a new row
     updateSequencesForTable("#ingredients-table");
     updateSequencesForTable("#steps-table");
   }
 
-  // -----------------------------
+  // =============================
   // Event listeners for "Add Ingredient" and "Add Step" buttons
-  // -----------------------------
+  // =============================
   document.getElementById("add-ingredients")?.addEventListener("click", () => addForm("ingredients"));
   document.getElementById("add-steps")?.addEventListener("click", () => addForm("steps"));
 
-  // -----------------------------
+  // =============================
   // Event listener for removing a form row
-  // Removes the row and updates sequence numbers
-  // -----------------------------
+  // Why: Allows users to remove unwanted ingredients or steps
+  // =============================
   document.addEventListener("click", e => {
     const btn = e.target.closest(".remove-form");
     if (btn) {
@@ -319,40 +318,61 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // -----------------------------
+  // =============================
   // Initialize SortableJS for drag-and-drop reordering
-  // Updates sequence numbers after reordering
-  // -----------------------------
+  // Why: Users can rearrange ingredients or steps by dragging them
+  // Updates sequence numbers after any reorder
+  // =============================
   const ingredientsTable = document.querySelector("#ingredients-table tbody");
   const stepsTable = document.querySelector("#steps-table tbody");
-  if (ingredientsTable) Sortable.create(ingredientsTable, { handle: ".handle", animation: 150, onEnd: () => updateSequencesForTable("#ingredients-table") });
-  if (stepsTable) Sortable.create(stepsTable, { handle: ".handle", animation: 150, onEnd: () => updateSequencesForTable("#steps-table") });
+  if (ingredientsTable) Sortable.create(ingredientsTable, {
+    handle: ".handle",
+    animation: 150,
+    onEnd: () => updateSequencesForTable("#ingredients-table")
+  });
+  if (stepsTable) Sortable.create(stepsTable, {
+    handle: ".handle",
+    animation: 150,
+    onEnd: () => updateSequencesForTable("#steps-table")
+  });
 
-  // -----------------------------
-  // Form validation setup
-  // Adds real-time validation and validates all fields on submit
-  // -----------------------------
-  const form = document.querySelector("form");
-  if (form) {
-    // Real-time validation for existing fields
+  // =============================
+  // Attach real-time validation to existing textareas
+  // =============================
+  form.querySelectorAll('textarea[name$="text"]').forEach(field => {
+    field.addEventListener("input", () => validateField(field));
+  });
+
+  // =============================
+  // Form submission handler
+  // Steps:
+  // 1. Trim all textarea values
+  // 2. Mark empty rows for deletion
+  // 3. Validate all fields
+  // 4. Prevent submission if validation fails
+  // =============================
+  form.addEventListener("submit", e => {
+    // Step 1: Trim all textareas
     form.querySelectorAll('textarea[name$="text"]').forEach(field => {
-      field.addEventListener("input", () => validateField(field));
+      field.value = field.value.trim();
     });
 
-    // Validate all fields on submit
-    form.addEventListener("submit", e => {
-      if (!validateAllFields(form)) {
-        e.preventDefault();
-        // Scroll to the first invalid field for better UX
-        const firstError = form.querySelector(".is-invalid");
-        firstError?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    });
-  }
+    // Step 2: Remove empty rows
+    removeEmptyRows("ingredients");
+    removeEmptyRows("steps");
 
-  // -----------------------------
+    // Step 3 & 4: Validate and block submission if any required field is empty
+    if (!validateAllFields(form)) {
+      e.preventDefault();
+      const firstError = form.querySelector(".is-invalid");
+      firstError?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+
+  // =============================
   // Initialize sequences on page load
-  // -----------------------------
+  // Why: Ensures proper numbering if editing an existing recipe
+  // =============================
   updateSequencesForTable("#ingredients-table");
   updateSequencesForTable("#steps-table");
 

@@ -29,13 +29,13 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("<int:pk>/category", views.category, name="category"),
     path("<int:pk>/recipe/", views.recipe, name="recipe"),
-    path('create_recipe/', views.createRecipe),
     path('profile/<int:pk>', views.userProfile, name='profile'),
     #user
     path('account/', views.userAccount, name='account'),
     path('editUser/', views.editUser, name='edit'),
-    path('createRecipe/', views.createRecipe, name='createRecipe'),
+    path('create_recipe/', views.createRecipe, name='create_recipe'),
     path('editRecipe/<int:pk>', views.editRecipe, name='editRecipe'),
+    path('delete_recipe/<int:pk>', views.delete_recipe, name='delete_recipe'),
     # search
     path('search-recipes/', views.search_recipes, name='search-recipes'),
     #admin panel

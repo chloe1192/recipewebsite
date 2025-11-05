@@ -73,6 +73,10 @@ ul li {
 }
 
 /* recipe content */
+.recipe-card-col {
+    min-width: 250px;
+}
+
 .recipe-dates,
 .recipe-author {
     width: 50%;

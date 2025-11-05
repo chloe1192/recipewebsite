@@ -8,7 +8,7 @@ from .models import User
 class CreateRecipeForm(ModelForm):
     class Meta:
         model = Recipe
-        fields = '__all__'
+        fields = ['name', 'img', 'sliderImg', 'difficulty', 'duration', 'description', 'category']
 
 # forms.py
 from django import forms
@@ -50,7 +50,7 @@ IngredientsFormSet = inlineformset_factory(
     Recipe,
     RecipeIngredient,
     form=RecipeIngredientForm,
-    extra=0,
+    extra=1,
     can_delete=True,
     validate_min=False,
 )
@@ -59,7 +59,7 @@ PreparationStepFormSet = inlineformset_factory(
     Recipe,
     PreparationStep,
     form=PreparationStepForm,
-    extra=0,
+    extra=1,
     can_delete=True,
     validate_min=False,
 )

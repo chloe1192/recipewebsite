@@ -109,7 +109,7 @@ class Recipe(models.Model):
 class RecipeIngredient(models.Model):
     text = models.TextField()
     sequence = models.IntegerField()
-    recipe = models.ForeignKey(Recipe, on_delete=models.RESTRICT)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.text
@@ -117,14 +117,14 @@ class RecipeIngredient(models.Model):
 class PreparationStep(models.Model):
     text = models.TextField()
     sequence = models.IntegerField()
-    recipe = models.ForeignKey(Recipe, on_delete=models.RESTRICT)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.text
 
 class Note(models.Model):
     content = models.TextField(null=True)
-    recipe = models.ForeignKey(Recipe, on_delete=models.RESTRICT)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.content
