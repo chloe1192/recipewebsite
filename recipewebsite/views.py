@@ -11,7 +11,7 @@ from .models import User
 def search_recipes(request):
     if request.method == 'POST':
         searched = request.POST['search-recipes']
-        recipes = Recipe.objects.filter(name__icontains=searched)
+        recipes = Recipe.objects.filter(name__icontains=searched, is_approved=True)
         context = {
             'searched': searched,
             'recipes' : recipes
@@ -19,7 +19,7 @@ def search_recipes(request):
     return render(request, 'search-recipe.html', context)
 
 def index(request):
-    recipes = Recipe.objects.all()
+    recipes = Recipe.objects.filter(is_approved=True)
     context = {
             "recipes":recipes
         }
@@ -30,7 +30,7 @@ def category(request, pk):
     for object in category_list:
         if object.id == pk:
             category = object
-            recipes = Recipe.objects.filter(category_id=pk)
+            recipes = Recipe.objects.filter(category_id=pk, is_approved=True)
     context = {
         "category":category,
         "recipes":recipes,

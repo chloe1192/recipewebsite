@@ -72,6 +72,7 @@ class Recipe(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     is_highlight = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-date_updated', '-date_created']
