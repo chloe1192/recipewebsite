@@ -2,7 +2,6 @@ from django import forms
 from django.forms import ModelForm, inlineformset_factory
 from .models import Recipe, RecipeIngredient, PreparationStep
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.contrib.auth import get_user_model
 from .models import User
 
 DIFFICULTY_CHOICES = [

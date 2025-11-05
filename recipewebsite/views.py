@@ -2,10 +2,9 @@ import pprint
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .forms import CreateRecipeForm, CustomUserChangeForm, CustomUserCreationForm, IngredientsFormSet, PreparationStepFormSet
-from .models import Category, Recipe, Note, PreparationStep, Ingredient, RecipeIngredient, SocialMedia
+from .models import Category, Recipe, Note, PreparationStep, RecipeIngredient, SocialMedia
 from .models import User
 
 def search_recipes(request):
