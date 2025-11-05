@@ -6,11 +6,12 @@
     <ul class="row">
         {% if recipes|length == 0 %}
             <h1 class="empty-list-warning">No recipes for {{ category.name|lower }}</h1>
+        {% else %}    
+            <h1>{{ category.name }}</h1>        
         {% endif %}
-
+        
         {% for recipe in recipes %}
-        <h1>{{ category.name }}</h1>
-        {% include 'recipe-card.html' %}
+            {% include 'recipe-card.html' %}
         {% endfor %}
 
     </ul>
