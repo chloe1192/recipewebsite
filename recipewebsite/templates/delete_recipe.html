@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">Confirmar Deleção</h4>
+                <p>Tem certeza que deseja deletar a receita <strong>"{{ recipe.name }}"</strong>?</p>
+                <hr>
+                <p class="mb-0">Esta ação é irreversível e todos os dados associados à receita serão deletados.</p>
+            </div>
+
+            <form method="POST" class="mt-4">
+                {% csrf_token %}
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger">Deletar Receita</button>
+                    <a href="{% url 'recipe' recipe.id %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
