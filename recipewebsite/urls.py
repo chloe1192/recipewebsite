@@ -1,19 +1,17 @@
-"""
-URL configuration for recipewebsite project.
+"""urls.py
 
-The `urlpatterns` list routes URLs to views. For more information please see:
+URL configuration for Recipe Website project.
+
+Routes URLs to views organized by functionality:
+- Authentication: login, register, logout
+- Browse: index, category, recipe, search
+- User: account, editUser, profile
+- Recipe Management: create_recipe, editRecipe, delete_recipe
+
+For more information:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 from . import views
@@ -21,25 +19,43 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 app_name = "recipewebsite"
-urlpatterns = [
+
+# ============ AUTHENTICATION ============
+authentication_patterns = [
     path('login/', views.loginPage, name='login'),
     path('register/', views.registerUser, name='register'),
     path('logout/', views.logoutUser, name='logout'),
-    # front
-    path("", views.index, name="index"),
-    path("<int:pk>/category", views.category, name="category"),
-    path("<int:pk>/recipe/", views.recipe, name="recipe"),
-    path('profile/<int:pk>', views.userProfile, name='profile'),
-    #user
-    path('account/', views.userAccount, name='account'),
-    path('editUser/', views.editUser, name='edit'),
-    path('create_recipe/', views.createRecipe, name='create_recipe'),
-    path('editRecipe/<int:pk>', views.editRecipe, name='editRecipe'),
-    path('delete_recipe/<int:pk>', views.delete_recipe, name='delete_recipe'),
-    # search
-    path('search-recipes/', views.search_recipes, name='search-recipes'),
-    #admin panel
-    path('admin/', admin.site.urls, name='create_recipe'),
 ]
 
+# ============ BROWSE & DISPLAY ============
+browse_patterns = [
+    path('', views.index, name='index'),
+    path('<int:pk>/category/', views.category, name='category'),
+    path('<int:pk>/recipe/', views.recipe, name='recipe'),
+    path('search-recipes/', views.search_recipes, name='search-recipes'),
+]
+
+# ============ USER ACCOUNT ============
+account_patterns = [
+    path('account/', views.userAccount, name='account'),
+    path('editUser/', views.editUser, name='edit'),
+    path('profile/<int:pk>/', views.userProfile, name='profile'),
+]
+
+# ============ RECIPE MANAGEMENT ============
+recipe_patterns = [
+    path('create_recipe/', views.createRecipe, name='create_recipe'),
+    path('editRecipe/<int:pk>/', views.editRecipe, name='editRecipe'),
+    path('delete_recipe/<int:pk>/', views.delete_recipe, name='delete_recipe'),
+]
+
+# ============ ADMIN ============
+admin_patterns = [
+    path('admin/', admin.site.urls, name='admin'),
+]
+
+# Combine all patterns
+urlpatterns = authentication_patterns + browse_patterns + account_patterns + recipe_patterns + admin_patterns
+
+# Static and media files
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
