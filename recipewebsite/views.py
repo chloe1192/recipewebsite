@@ -383,6 +383,7 @@ def logoutUser(request):
     logout(request)
     return redirect('index')
 
+# TODO delete account view
 
 # ============ USER ACCOUNT ============
 
@@ -482,3 +483,27 @@ def userProfile(request, pk):
         'socials': socials
     }
     return render(request, 'profile.html', context)
+
+# ============ REVIEWS ============
+
+@login_required(login_url='/login')
+def review_create(request):
+    pass
+
+@login_required(login_url='/login')
+def review_update(request, pk):
+    pass
+
+@login_required(login_url='/login')
+def review_list(request, pk=None):
+    if pk:
+        # find single review
+        pass
+    else:
+        # list all reviews
+        pass
+    pass
+
+@login_required(login_url='/login')
+def review_delete(request, pk):
+    pass

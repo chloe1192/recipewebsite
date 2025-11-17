@@ -29,7 +29,7 @@
                             {{category.name}}</a
                         >
                     </li>
-                    {% if category.length >= 5 %}dropdown{% endif %}
+                    {% if category.length >= 5 %}<!-- TODO collapse if theres a lot -->>{% endif %}
                     {% endfor %} {% if request.user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'account' %}">
