@@ -2,7 +2,7 @@
 <head>
     {% load static %}
     {% load compress %}
-    <meta lang="en">
+    <meta lang="pt-br">
     <meta charset="utf-8">
     
     <title>{% block title %}{{ settings.SETTING }}{% endblock %}</title>
@@ -27,8 +27,8 @@
             {% for message in messages %}
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title">Notificação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -36,14 +36,14 @@
                     <ul class="messages">
                         {% for message in messages %}
                         <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Importante: {% endif %}
                             {{ message }}
                         </li>
                         {% endfor %}
                     </ul>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                 </div>
             </div>
             {% endfor %}

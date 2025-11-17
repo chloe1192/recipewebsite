@@ -23,15 +23,15 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'create_recipe' %}">
-                                <i class="bi bi-plus"></i> Create
+                                <i class="bi bi-plus"></i> Criar
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                            <a class="nav-link" href="{% url 'logout' %}">Sair</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            <a class="nav-link" href="{% url 'login' %}">Entrar</a>
                         </li>
                         {% endif %}
                 </ul>
@@ -39,7 +39,7 @@
             <form class="form-inline" method="post" action="{% url 'search-recipes' %}">
                 {% csrf_token %}
                 <div class="form-group">
-                    <input class="form-control search-input mr-sm-2" name="search-recipes" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control search-input mr-sm-2" name="search-recipes" type="search" placeholder="Buscar receitas..." aria-label="Buscar">
                     <button class="btn btn-outline-secondary search-button my-2 my-sm-0" type="submit">
                         <i class="bi bi-search"></i>
                     </button>

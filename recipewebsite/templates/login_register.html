@@ -14,18 +14,18 @@
                 </div>
             {% endfor %}
             <div class="form-group">
-                <label class="sr-only" for="username">Email address</label>
-                <input type="email" class="form-control" id="username" name="username" aria-describedby="emailHelp">
+                <label class="sr-only" for="username">Endereço de email</label>
+                <input type="email" class="form-control" id="username" name="username" aria-describedby="emailHelp" placeholder="Email">
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
+                <label for="password">Senha</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Senha">
             </div>
             <div class="form-group py-2">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Entrar</button>
             </div>            
             <div class="form-group">
-                <label><a href="{% url 'register' %}">Create account</a></label>
+                <label><a href="{% url 'register' %}">Criar conta</a></label>
             </div>
             
         </form>
@@ -46,7 +46,7 @@
                 {{field}}
             </div>
             {% endfor %}
-            <button class="btn btn-primary" type="submit">Register</button>
+            <button class="btn btn-primary" type="submit">Cadastrar</button>
         </form>
         {% endif %}
     </div>

@@ -10,10 +10,10 @@
 					class="bg-body-tertiary rounded-3 p-3 mb-4"
 				>
 					<ol class="breadcrumb mb-0">
-						<li class="breadcrumb-item"><a href="#">Home</a></li>
-						<li class="breadcrumb-item"><a href="#">User</a></li>
+						<li class="breadcrumb-item"><a href="#">Início</a></li>
+						<li class="breadcrumb-item"><a href="#">Usuário</a></li>
 						<li class="breadcrumb-item active" aria-current="page">
-							User Profile
+							Perfil do Usuário
 						</li>
 					</ol>
 				</nav>
@@ -40,7 +40,7 @@
 								data-mdb-ripple-init
 								class="btn btn-primary"
 							>
-								<a href="{% url 'edit' %}">Edit</a>
+								<a href="{% url 'edit' %}">Editar</a>
 								
 							</button>
 							<button
@@ -49,7 +49,7 @@
 								data-mdb-ripple-init
 								class="btn btn-outline-primary ms-1"
 							>
-								<a href="{% url 'create_recipe' %}">Create recipe</a>
+								<a href="{% url 'create_recipe' %}">Criar receita</a>
 							</button>
 						</div>
 					</div>
@@ -79,7 +79,7 @@
 						
 						<div class="row">
 							<div class="col-sm-3">
-								<p class="mb-0">Full Name</p>
+								<p class="mb-0">Nome Completo</p>
 							</div>
 							<div class="col-sm-9">
 								<p class="text-muted mb-0">{{ user.first_name }} {% if user.last_name %}{{ user.last_name }}{% endif %}</p>
@@ -99,7 +99,7 @@
 						<hr />
 						<div class="row">
 							<div class="col-sm-3">
-								<p class="mb-0">City</p>
+								<p class="mb-0">Cidade</p>
 							</div>
 							<div class="col-sm-9">
 								<p class="text-muted mb-0"> {{ user.city.city }} </p>
@@ -109,20 +109,20 @@
 						<hr />
 						<div class="row">
 							<div class="col-sm-3">
-								<p class="mb-0">Joined on</p>
+								<p class="mb-0">Entrou em</p>
 							</div>
 							<div class="col-sm-9">
-								<p class="text-muted mb-0">{{ user.date_joined }}</p>
+								<p class="text-muted mb-0">{{ user.date_joined|date:"d/m/Y" }}</p>
 							</div>
 						</div>
 
 						<hr />
 						<div class="row">
 							<div class="col-sm-3">
-								<p class="mb-0">Active on</p>
+								<p class="mb-0">Último acesso</p>
 							</div>
 							<div class="col-sm-9">
-								<p class="text-muted mb-0">{{ user.last_login }}</p>
+								<p class="text-muted mb-0">{{ user.last_login|date:"d/m/Y H:i" }}</p>
 							</div>
 						</div>
 
@@ -133,7 +133,7 @@
 						<div class="card mb-4 mb-md-0">
 							<div class="card-body">
 								<p class="mb-4">
-									<span class="text-primary font-italic me-1">Recipes upped</span>
+									<span class="text-primary font-italic me-1">Receitas publicadas</span>
 									{{ recipes.count }}
 								</p>
 								{% for recipe in recipes %}
@@ -146,8 +146,8 @@
 						<div class="card mb-4 mb-md-0">
 							<div class="card-body">
 								<p class="mb-4">
-									<span class="text-primary font-italic me-1">assigment</span>
-									Project Status
+									<span class="text-primary font-italic me-1">atividades</span>
+									Status dos Projetos
 								</p>
 								<p class="mb-1" style="font-size: 0.77rem">Web Design</p>
 								<div class="progress rounded" style="height: 5px">
