@@ -178,12 +178,12 @@ class Recipe(models.Model):
     difficulty = models.IntegerField(
         null=True,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
-        help_text="Difficulty level from 1 (Very Easy) to 5 (Very Hard)"
+        help_text="Nível de dificuldade de 1 (Muito Fácil) a 5 (Muito Difícil)"
     )
     duration = models.IntegerField(
         null=True,
         validators=[MinValueValidator(1)],
-        help_text="Duration in minutes"
+        help_text="Duração em minutos"
     )
     description = models.TextField(null=True)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
@@ -194,9 +194,9 @@ class Recipe(models.Model):
     is_approved = models.BooleanField(default=False)
 
     class Meta:
-        # Order by newest first
+        # Ordenar por mais recente primeiro
         ordering = ['-date_updated', '-date_created']
-        # Database indexes for common queries
+        # Índices do banco de dados para consultas comuns
         indexes = [
             models.Index(fields=['-date_updated']),
             models.Index(fields=['creator', 'is_approved']),
