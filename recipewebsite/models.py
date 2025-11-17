@@ -1,9 +1,68 @@
+"""models.py
+
+Database models for Recipe Website application.
+
+Models:
+    Place: Geographical location of users
+    User: Custom user model extending Django's AbstractUser  
+    Category: Recipe categories
+    Ingredient: Ingredient reference data
+    Icons: Font Awesome icons for recipes
+    Recipe: Main recipe model with image processing
+    RecipeIngredient: Ingredients for each recipe
+    PreparationStep: Steps to prepare a recipe
+    Note: User notes on recipes
+    SocialMedia: Social media profiles for users
+"""
+
+import logging
 from PIL import Image
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 from location_field.models.plain import PlainLocationField
 
+logger = logging.getLogger(__name__)
+
+
+def resize_and_crop_image(image_path, target_size):
+    """Crop and resize images to target dimensions.
+    
+    Crops image to square then resizes to target size. Used for profile
+    avatars (512x512) and recipe images (1920x1080).
+    
+    Args:
+        image_path (str): Path to image file
+        target_size (tuple): Target size as (width, height)
+    
+    Returns:
+        None: Image is saved in-place
+    
+    Logs:
+        logger.error: If image processing fails
+    """
+    try:
+        img = Image.open(image_path)
+        if img.size != target_size:
+            width, height = img.size
+            min_dim = min(width, height)
+            left = (width - min_dim) / 2
+            top = (height - min_dim) / 2
+            right = left + min_dim
+            bottom = top + min_dim
+            img = img.crop((left, top, right, bottom))
+            img = img.resize(target_size, Image.Resampling.LANCZOS)
+            img.save(image_path, quality=95)
+    except Exception as e:
+        logger.error(f"Error resizing image at {image_path}: {str(e)}")
+
 class Place(models.Model):
+    """Geographical location/city.
+    
+    Attributes:
+        city (str): City name
+        location: Geographic coordinates (PlainLocationField)
+    """
     city = models.CharField(max_length=255)
     location = PlainLocationField(based_fields=['city'], zoom=7)
     
@@ -11,9 +70,27 @@ class Place(models.Model):
         return self.city
 
 class User(AbstractUser):
+    """Custom user model extending Django's AbstractUser.
+    
+    Uses email as USERNAME_FIELD for authentication. Extends default User 
+    with profile information including bio, avatar, city, and phone.
+    
+    Attributes:
+        first_name (str): User's first name
+        last_name (str): User's last name
+        username (str): Unique username
+        email (str): Unique email address (USERNAME_FIELD)
+        bio (str): User biography
+        avatar (ImageField): Profile picture auto-resized to 512x512
+        city (ForeignKey): Reference to Place model
+        phone (str): Phone number
+    
+    Methods:
+        save(): Auto-resizes avatar to 512x512 on save
+    """
     first_name = models.CharField(max_length=150, null=True)
     last_name = models.CharField(max_length=150, blank=True, null=True)
-    username = models.CharField(max_length=200, null=True, unique="True", default=None)
+    username = models.CharField(max_length=200, null=True, unique=True, default=None)
     email = models.EmailField(unique=True)
     bio = models.TextField(null=True, default=None, blank=True)
     avatar = models.ImageField(default='default.png', upload_to='profile_images')
@@ -24,33 +101,44 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['first_name',  'password']
 
     def save(self, *args, **kwargs):
+        """Save user and auto-resize avatar to 512x512."""
         super().save(*args, **kwargs)
-
-        avatar = Image.open(self.avatar.path)
-        if avatar.size != (512, 512):
-            width, height = avatar.size
-            min_dim = min(width, height)
-            left = (width - min_dim) / 2
-            top = (height - min_dim) / 2
-            right = (width + min_dim) / 2
-            bottom = (height + min_dim) / 2
-            avatar = avatar.crop((left, top, right, bottom))
-            avatar = avatar.resize((512, 512))
-            avatar.save(self.avatar.path)
+        if self.avatar:
+            resize_and_crop_image(self.avatar.path, (512, 512))
 
 class Category(models.Model):
+    """Recipe category/cuisine type.
+    
+    Attributes:
+        name (str): Category name (e.g., 'Italian', 'Mexican', 'Vegan')
+    """
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
+
 
 class Ingredient(models.Model):
+    """Common ingredient reference data.
+    
+    Used for categorizing and organizing recipe ingredients.
+    
+    Attributes:
+        name (str): Ingredient name (e.g., 'Tomato', 'Basil')
+    """
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
 
+
 class Icons(models.Model):
+    """Font Awesome icons for recipes and social media.
+    
+    Attributes:
+        name (str): Icon name
+        html_class (str): Font Awesome class (e.g., 'fab fa-instagram')
+    """
     name = models.CharField(max_length=255)
     html_class = models.CharField(max_length=255)
 
@@ -58,11 +146,45 @@ class Icons(models.Model):
         return self.name
     
 class Recipe(models.Model):
+    """Main recipe model with approval workflow.
+    
+    Stores complete recipe information including images, difficulty, duration,
+    and approval status. Images are automatically resized on save.
+    
+    Attributes:
+        name (str): Recipe name
+        img (ImageField): Recipe main image auto-resized to 1920x1080
+        sliderImg (ImageField): Hero slider image auto-resized to 1920x1080
+        difficulty (int): Difficulty level 1-5 (1=Very Easy, 5=Very Hard)
+        duration (int): Preparation time in minutes (minimum 1)
+        description (str): Recipe description/instructions
+        category (ForeignKey): Recipe category
+        date_created (DateTime): Creation timestamp
+        date_updated (DateTime): Last modification timestamp
+        creator (ForeignKey): Recipe author (User)
+        is_highlight (bool): Featured recipe flag
+        is_approved (bool): Admin approval status
+    
+    Meta:
+        ordering: By date_updated then date_created (newest first)
+        indexes: For performance optimization on common queries
+    
+    Methods:
+        save(): Auto-resizes images to target dimensions before saving
+    """
     name = models.CharField(max_length=255)
     img = models.ImageField(upload_to="recipes",null=True,default='default.jpg',)
     sliderImg = models.ImageField(upload_to="recipes",null=True,default='default.jpg',)
-    difficulty = models.IntegerField(null=True)
-    duration = models.IntegerField(null=True)
+    difficulty = models.IntegerField(
+        null=True,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        help_text="Difficulty level from 1 (Very Easy) to 5 (Very Hard)"
+    )
+    duration = models.IntegerField(
+        null=True,
+        validators=[MinValueValidator(1)],
+        help_text="Duration in minutes"
+    )
     description = models.TextField(null=True)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -72,62 +194,92 @@ class Recipe(models.Model):
     is_approved = models.BooleanField(default=False)
 
     class Meta:
+        # Order by newest first
         ordering = ['-date_updated', '-date_created']
-            
+        # Database indexes for common queries
+        indexes = [
+            models.Index(fields=['-date_updated']),
+            models.Index(fields=['creator', 'is_approved']),
+        ]
+    
     def save(self, *args, **kwargs):
+        """Save recipe and auto-resize images to target dimensions."""
         super().save(*args, **kwargs)
-
-        sliderImg = Image.open(self.sliderImg.path)
-        if sliderImg.size != (1920, 1080):
-            width, height = sliderImg.size
-            min_dim = min(width, height)
-            left = (width - min_dim) / 2
-            top = (height - min_dim) / 2
-            right = (width + min_dim) / 2
-            bottom = (height + min_dim) / 2
-            sliderImg = sliderImg.crop((left, top, right, bottom))
-            sliderImg = sliderImg.resize((1920, 1080))
-            sliderImg.save(self.sliderImg.path)
-
-        img = Image.open(self.img.path)
-        if img.size != (1920, 1080):
-            width, height = img.size
-            min_dim = min(width, height)
-            left = (width - min_dim) / 2
-            top = (height - min_dim) / 2
-            right = (width + min_dim) / 2
-            bottom = (height + min_dim) / 2
-            img = img.crop((left, top, right, bottom))
-            img = img.resize((1920, 1080))
-            img.save(self.img.path)
+        if self.sliderImg:
+            resize_and_crop_image(self.sliderImg.path, (1920, 1080))
+        if self.img:
+            resize_and_crop_image(self.img.path, (1920, 1080))
 
     def __str__(self):
         return self.name
 
 class RecipeIngredient(models.Model):
+    """Ingredients for a recipe with ordering.
+    
+    Attributes:
+        text (str): Ingredient description/measurement
+        sequence (int): Order of ingredients (minimum 1)
+        recipe (ForeignKey): Parent recipe
+    
+    Meta:
+        ordering: By sequence (1, 2, 3, ...)
+    """
     text = models.TextField()
-    sequence = models.IntegerField()
+    sequence = models.IntegerField(validators=[MinValueValidator(1)])
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    
+    class Meta:
+        ordering = ['sequence']
     
     def __str__(self):
         return self.text
 
+
 class PreparationStep(models.Model):
+    """Step-by-step preparation instructions for a recipe.
+    
+    Attributes:
+        text (str): Step description/instruction
+        sequence (int): Order of steps (minimum 1)
+        recipe (ForeignKey): Parent recipe
+    
+    Meta:
+        ordering: By sequence (1, 2, 3, ...)
+    """
     text = models.TextField()
-    sequence = models.IntegerField()
+    sequence = models.IntegerField(validators=[MinValueValidator(1)])
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['sequence']
 
     def __str__(self):
         return self.text
 
 class Note(models.Model):
+    """User notes/tips for a recipe.
+    
+    Attributes:
+        content (str): Note content
+        recipe (ForeignKey): Recipe the note belongs to
+    """
     content = models.TextField(null=True)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.content
 
+
 class SocialMedia(models.Model):
+    """Social media profiles for users.
+    
+    Attributes:
+        social_name (str): Social network name (e.g., 'Instagram', 'Twitter')
+        profile_name (str): User's profile name on that network
+        icon (ForeignKey): Icon/Font Awesome class from Icons model
+        link (str): Direct link to profile
+        user (ForeignKey): User who owns the profile
+    """
     social_name = models.CharField(max_length=255, null=True)
     profile_name = models.CharField(max_length=255, null=True)
     icon = models.ForeignKey(Icons, on_delete=models.RESTRICT, null=True)
