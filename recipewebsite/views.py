@@ -24,6 +24,7 @@ from django_ratelimit.decorators import ratelimit
 from .forms import CreateRecipeForm, CustomUserChangeForm, CustomUserCreationForm, IngredientsFormSet, PreparationStepFormSet
 from .models import Category, Recipe, Note, PreparationStep, RecipeIngredient, SocialMedia
 from .models import User
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +49,7 @@ def search_recipes(request):
     context = {}
     if request.method == 'POST':
         searched = request.POST.get('search-recipes', '')
-        recipes_list = Recipe.objects.filter(name__icontains=searched, is_approved=True).select_related('category', 'creator')
+        recipes_list = Recipe.objects.filter(Q(name__icontains=searched) | Q(recipeingredient__text__icontains=searched), is_approved=True).select_related('category', 'creator').distinct()
         paginator = Paginator(recipes_list, PAGE_SIZE)
         page = request.GET.get('page', 1)
         try:
