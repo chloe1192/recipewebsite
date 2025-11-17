@@ -123,6 +123,7 @@ celerybeat.pid
 
 # Environments
 .env
+.secrets/
 .venv
 env/
 venv/
@@ -156,9 +157,17 @@ cython_debug/
 
 # Media uploaded
 media/
+!media/.gitkeep
+!media/recipes/.gitkeep
+!media/profile_images/.gitkeep
+staticfiles/
 
 # Database migrations
 migrations/
+
+# Documentation (local - don't commit)
+docs/
+!docs/.gitkeep
 
 # scss cache
 CACHE/
