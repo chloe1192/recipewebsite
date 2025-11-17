@@ -47,6 +47,8 @@ INSTALLED_APPS = [
 
 # ============ COMPRESSION ============
 
+COMPRESS_ENABLED = DEBUG  # Habilita compressão apenas em produção
+COMPRESS_OFFLINE = False  # Desabilita compressão offline
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
@@ -128,9 +130,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # See https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
