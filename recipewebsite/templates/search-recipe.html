@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Search for {{ searched }}{% endblock %}
+{% block title %}Buscar por {{ searched }}{% endblock %}
 {% include "header.html" %}
 {% block content %}
 <div class="container">
     <ul class="row">
         {% if recipes|length == 0 %}
-            <h1 class="empty-list-warning">The search found no result</h1>
+            <h1 class="empty-list-warning">Nenhum resultado encontrado</h1>
         {% endif %}
 
         {% for recipe in recipes %}

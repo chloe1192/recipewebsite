@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 
 <div class="container my-5">
-	<h1 class="mb-4">{% if form.instance.pk %}Edit Recipe{% else %}Create Recipe{% endif %}</h1>
+	<h1 class="mb-4">{% if form.instance.pk %}Editar Receita{% else %}Criar Receita{% endif %}</h1>
 
 	<form method="POST" enctype="multipart/form-data" novalidate id="recipeForm">
 		{% csrf_token %}
@@ -19,18 +19,18 @@
 		<!-- === Main Recipe Form === -->
 		<div class="card mb-4 shadow-sm">
 			<div class="card-body">
-				<div class="mb-3">
-					<label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
+			<div class="mb-3">
+				<label for="{{ form.name.id_for_label }}" class="form-label">Nome</label>
 					{{ form.name|add_class:"form-control" }}
 					{% if form.name.errors %}
 						<div class="invalid-feedback d-block">{{ form.name.errors|striptags }}</div>
 					{% endif %}
 				</div>
 
-				<div class="mb-3">
-					<label for="{{ form.img.id_for_label }}" class="form-label">Image</label>
-					{% if form.img.value %}
-						<p>Currently: <a href="{{ form.img.value.url }}">{{ form.img.value.name }}</a></p>
+			<div class="mb-3">
+				<label for="{{ form.img.id_for_label }}" class="form-label">Imagem</label>
+				{% if form.img.value %}
+					<p>Atual: <a href="{{ form.img.value.url }}">{{ form.img.value.name }}</a></p>
 					{% endif %}
 					{{ form.img|add_class:"form-control" }}
 					{% if form.img.errors %}
@@ -38,10 +38,10 @@
 					{% endif %}
 				</div>
 
-				<div class="mb-3">
-					<label for="{{ form.sliderImg.id_for_label }}" class="form-label">Slider Image</label>
-					{% if form.sliderImg.value %}
-						<p>Currently: <a href="{{ form.sliderImg.value.url }}">{{ form.sliderImg.value.name }}</a></p>
+			<div class="mb-3">
+				<label for="{{ form.sliderImg.id_for_label }}" class="form-label">Imagem Slider</label>
+				{% if form.sliderImg.value %}
+					<p>Atual: <a href="{{ form.sliderImg.value.url }}">{{ form.sliderImg.value.name }}</a></p>
 					{% endif %}
 					{{ form.sliderImg|add_class:"form-control" }}
 					{% if form.sliderImg.errors %}
@@ -49,8 +49,8 @@
 					{% endif %}
 				</div>
 
-				<div class="mb-3">
-					<label class="form-label">Difficulty</label>
+			<div class="mb-3">
+				<label class="form-label">Dificuldade</label>
 					<div class="star-rating-wrapper">
 						<div class="star-rating">
 							{% for value, label in form.difficulty.field.choices reversed %}
@@ -66,24 +66,24 @@
 				</div>
 
 
-				<div class="mb-3">
-					<label for="{{ form.duration.id_for_label }}" class="form-label">Duration (minutes)</label>
+			<div class="mb-3">
+				<label for="{{ form.duration.id_for_label }}" class="form-label">Duração (minutos)</label>
 					{{ form.duration|add_class:"form-control" }}
 					{% if form.duration.errors %}
 						<div class="invalid-feedback d-block">{{ form.duration.errors|striptags }}</div>
 					{% endif %}
 				</div>
 
-				<div class="mb-3">
-					<label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+			<div class="mb-3">
+				<label for="{{ form.description.id_for_label }}" class="form-label">Descrição</label>
 					{{ form.description|add_class:"form-control" }}
 					{% if form.description.errors %}
 						<div class="invalid-feedback d-block">{{ form.description.errors|striptags }}</div>
 					{% endif %}
 				</div>
 
-				<div class="mb-3">
-					<label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+			<div class="mb-3">
+				<label for="{{ form.category.id_for_label }}" class="form-label">Categoria</label>
 					{{ form.category|add_class:"form-select" }}
 					{% if form.category.errors %}
 						<div class="invalid-feedback d-block">{{ form.category.errors|striptags }}</div>
@@ -96,9 +96,9 @@
 		<!-- === Ingredients === -->
 		<div class="card mb-4 shadow-sm">
 			<div class="card-header d-flex justify-content-between align-items-center">
-				<h4 class="mb-0">Ingredients</h4>
+				<h4 class="mb-0">Ingredientes</h4>
 				<button type="button" id="add-ingredients" class="btn btn-outline-primary btn-sm">
-					<i class="bi bi-plus-lg"></i> Add Ingredient
+					<i class="bi bi-plus-lg"></i> Adicionar Ingrediente
 				</button>
 			</div>
 			<div class="card-body" id="ingredients-formset">
@@ -106,9 +106,9 @@
 				<table class="table table-bordered align-middle" id="ingredients-table">
 					<thead class="table-light">
 						<tr>
-							<th>Description</th>
-							<th style="width: 120px">Order</th>
-							<th style="width: 100px">Actions</th>
+							<th>Descrição</th>
+							<th style="width: 120px">Ordem</th>
+							<th style="width: 100px">Ações</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -117,10 +117,10 @@
 								{{ form.id }}
 								<td class="handle" style="cursor: grab">⬍ {{ form.text|add_class:"form-control" }}</td>
 								<td>{{ form.sequence|add_class:"form-control"|attr:"readonly:true" }}</td>
-								<td>
-									<button type="button" class="remove-form btn btn-outline-danger btn-sm">
-										<i class="bi bi-trash"></i> Remove
-									</button>
+							<td>
+								<button type="button" class="remove-form btn btn-outline-danger btn-sm">
+									<i class="bi bi-trash"></i> Remover
+								</button>
 								</td>
 							</tr>
 						{% endfor %}
@@ -145,9 +145,9 @@
 		<!-- === Steps === -->
 		<div class="card mb-4 shadow-sm">
 			<div class="card-header d-flex justify-content-between align-items-center">
-				<h4 class="mb-0">Steps</h4>
+				<h4 class="mb-0">Passos</h4>
 				<button type="button" id="add-steps" class="btn btn-outline-primary btn-sm">
-					<i class="bi bi-plus-lg"></i> Add Step
+					<i class="bi bi-plus-lg"></i> Adicionar Passo
 				</button>
 			</div>
 			<div class="card-body" id="steps-formset">
@@ -155,9 +155,9 @@
 				<table class="table table-bordered align-middle" id="steps-table">
 					<thead class="table-light">
 						<tr>
-							<th>Instruction</th>
-							<th style="width: 120px">Order</th>
-							<th style="width: 100px">Actions</th>
+							<th>Instrução</th>
+							<th style="width: 120px">Ordem</th>
+							<th style="width: 100px">Ações</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -191,10 +191,10 @@
 			</div>
 		</div>
 
-		<!-- === Submit === -->
-		<button type="submit" class="btn btn-success btn-lg">
-			<i class="bi bi-save"></i> {% if form.instance.pk %}Save Recipe{% else %}Create Recipe{% endif %}
-		</button>
+	<!-- === Submit === -->
+	<button type="submit" class="btn btn-success btn-lg">
+		<i class="bi bi-save"></i> {% if form.instance.pk %}Salvar Receita{% else %}Criar Receita{% endif %}
+	</button>
 	</form>
 </div>
 

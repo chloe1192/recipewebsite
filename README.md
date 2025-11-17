@@ -1,49 +1,85 @@
+# Recipe Sharing Platform
 
-# 🍳 Recipe Website
+A Django web application for managing and sharing cooking recipes.
 
-A full-featured Django web app for managing and sharing recipes.
-Built to demonstrate modern full-stack development skills including formsets, media handling, search filtering, and custom user interfaces.
+⚠️ **Work in Progress** — This project is under active development and not yet complete.
 
-# 🚀 Features
+## Tech Stack
 
-👩‍🍳 Add & Edit Recipes with dynamic ingredient and step formsets
+- Python 3.11+ / Django 5.x
+- MySQL database
+- Bootstrap 5 for UI
+- SCSS with django-compressor
+- Pillow for image processing
 
-⭐ Rate Recipes with an interactive star system
+## Features
 
-🔍 Search & Filter recipes by name, ingredients, or rating
+- User authentication and profiles
+- Recipe CRUD with image uploads
+- Category browsing and search
+- Internationalization support (Unicode names)
+- Responsive design
 
-🖼️ Upload Images and display them responsively
+## Quick Setup
 
-📍 Location Field integration (optional map input)
-
-🧹 Clean, responsive UI using Bootstrap 5 and custom SCSS
-
-⚙️ Built with Django best practices and reusable components
-
-# 🛠️ Tech Stack
-
-Backend: Django
-
-Frontend: Bootstrap 5, JavaScript
-
-Database: MySQL
-
-# 🧩 Setup
-````
+```bash
+# Clone repository
 git clone https://github.com/chloe1192/recipewebsite.git
 cd recipewebsite
+
+# Create virtual environment
 python -m venv venv
-````
-Windows
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
-`venv\Scripts\activate`
-
-Linux/Mac
-
-`source venv/bin/activate`
-
-````
+# Install dependencies
 pip install -r requirements.txt
+
+# Configure environment
+cp .env.example .env  # Edit with your settings
+
+# Setup database
 python manage.py migrate
+python manage.py createsuperuser
+
+# Run development server
 python manage.py runserver
-````
+```
+
+## Environment Variables
+
+Create a `.env` file with:
+
+```
+SECRET_KEY=your-secret-key
+DEBUG=True
+DB_NAME=recipewebsite
+DB_USER=root
+DB_PASSWORD=your-password
+DB_HOST=localhost
+DB_PORT=3306
+```
+
+## Project Structure
+
+```
+recipewebsite/
+├── models.py          # Database models
+├── views.py           # Request handlers
+├── forms.py           # Form validation
+├── templates/         # HTML templates
+└── static/            # CSS/JS/images
+```
+
+## Development Status
+
+Current implementation includes basic recipe sharing functionality. Planned improvements:
+
+- Complete test coverage
+- Enhanced search filters
+- Rating system
+- Recipe collections
+- API endpoints
+
+## Notes
+
+This is a learning project showcasing Django development practices. Feedback and suggestions are welcome.
