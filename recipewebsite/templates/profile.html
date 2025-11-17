@@ -1,15 +1,137 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <div class="row">
-        <h1>Not my user</h1>
-        <div class="col-12">
-            {{ user.username }}
-            {{ user.email }}
-            {{ user.first_name }}
-            {{ user.first_name }}
-        </div>
 
-    </div>
-</div>
+<section class="profile-section">
+	<div class="container py-5">
+		<div class="row">
+			<div class="col">
+				<nav aria-label="breadcrumb" class="breadcrumb-custom mb-4">
+					<ol class="breadcrumb mb-0">
+						<li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="fas fa-home"></i> Início</a></li>
+						<li class="breadcrumb-item active" aria-current="page">
+							<i class="fas fa-user"></i> Perfil de {{ user.username }}
+						</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="card profile-card-public mb-4">
+					<div class="card-body text-center">
+						<div class="avatar-wrapper mb-3">
+							<img
+								src="{{ user.avatar.url }}"
+								alt="avatar de {{ user.username }}"
+								class="avatar-img"
+							/>
+						</div>
+						<h4 class="profile-name">{{ user.username }}</h4>
+						{% if user.first_name %}
+						<p class="profile-fullname">{{ user.first_name }} {% if user.last_name %}{{ user.last_name }}{% endif %}</p>
+						{% endif %}
+						{% if user.bio %}
+						<p class="profile-bio">{{ user.bio }}</p>
+						{% endif %}
+						{% if user.city %}
+						<p class="profile-location"><i class="fas fa-map-marker-alt"></i> {{ user.city.city }}</p>
+						{% endif %}
+						<div class="profile-stats mb-3">
+							<div class="stat-item">
+								<span class="stat-value">{{ recipes.count }}</span>
+								<span class="stat-label">Receitas</span>
+							</div>
+							<div class="stat-item">
+								<span class="stat-value">{{ user.date_joined|date:"Y" }}</span>
+								<span class="stat-label">Membro desde</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				{% if socials %}
+				<div class="card social-card mb-4">
+					<div class="card-body">
+						<h6 class="card-title mb-3"><i class="fas fa-share-alt"></i> Redes Sociais</h6>
+						<ul class="social-list">
+							{% for social in socials %}
+							<li class="social-item">
+								<a href="{{ social.link }}" target="_blank" class="social-link">
+									<i class="{{ social.icon.html_class }}"></i>
+									<span>{{ social.profile_name }}</span>
+								</a>
+							</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+				{% endif %}
+				
+				<div class="card info-card-public">
+					<div class="card-body">
+						<h6 class="card-title mb-3"><i class="fas fa-info-circle"></i> Sobre</h6>
+						
+						{% if user.email %}
+						<div class="info-item">
+							<i class="fas fa-envelope"></i>
+							<div>
+								<span class="info-label">Email</span>
+								<span class="info-value">{{ user.email }}</span>
+							</div>
+						</div>
+						{% endif %}
+						
+						{% if user.city %}
+						<div class="info-item">
+							<i class="fas fa-map-marker-alt"></i>
+							<div>
+								<span class="info-label">Localização</span>
+								<span class="info-value">{{ user.city.city }}</span>
+							</div>
+						</div>
+						{% endif %}
+						
+						<div class="info-item">
+							<i class="fas fa-calendar-plus"></i>
+							<div>
+								<span class="info-label">Membro desde</span>
+								<span class="info-value">{{ user.date_joined|date:"F \d\e Y" }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-8">
+				<div class="card recipes-card-public">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center mb-4">
+							<h5 class="card-title mb-0">
+								<i class="fas fa-utensils"></i> Receitas de {{ user.username }}
+								<span class="badge bg-primary">{{ recipes.count }}</span>
+							</h5>
+						</div>
+						
+						{% if recipes %}
+						<div class="row">
+							{% for recipe in recipes %}
+							<div class="col-md-6 mb-3">
+								{% include 'recipe-card.html' %}
+							</div>
+							{% endfor %}
+						</div>
+						{% else %}
+						<div class="empty-state">
+							<i class="fas fa-book-open"></i>
+							<p>{{ user.username }} ainda não publicou nenhuma receita</p>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
 {% endblock %}

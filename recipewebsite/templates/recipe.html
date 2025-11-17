@@ -1,100 +1,248 @@
-{% extends "base.html" %}
-{% block title %}{{ recipe.name_recipe }}{% endblock %}
-{% include "header.html" %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ recipe.name }} - Site de Receitas{% endblock %}
+
+{% block extra_css %}
+<style>
+    .recipe-hero {
+        background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('{{ recipe.sliderImg.url }}');
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container">
-
-		<div class="row">
-				<div class="col-12">
-						<div class="recipe-page-content row">
-								<div class="recipe-dates col-6">
-										<div class="recipe-date-created">Created on {{recipe.date_created|date:"j F Y"}}</div>
-										<div class="recipe-date-updated">Last edited on {{recipe.date_updated|date:"j F Y"}}</div>
-								</div>
-								<div class="recipe-author col-6">
-										<img class="recipe-author-image">
-										<div class="recipe-author-name">
-												<a href="{% url 'profile' recipe.creator.id %}">
-														<img src="{{ recipe.creator.avatar.url }}" height="40px" width="40px">
-														{{recipe.creator.first_name}}
-												</a>
-										</div>
-								</div>
-								<h1 class="recipe-title col-12">
-										{{ recipe.name }}
-										{% if recipe.creator.id == request.user.id%}
-										<a href="{% url 'editRecipe' recipe.id %}" class="btn btn-info" >
-												<i class="bi bi-pen"></i>
-										</a>
-										<a href="{% url 'delete_recipe' recipe.id %}" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-recipe-id="{{ recipe.id }}">
-												<i class="bi bi-trash"></i>
-										</a>
-										{% endif %}
-								</h1>
-								<img
-										class="full-recipe-photo"
-										src="{{recipe.sliderImg.url}}"
-										alt="{{recipe.name}}"
-								/>
-								<div class="recipe-difficulty col-6">
-										Difficulty&nbsp;
-										<i class="bi {% if recipe.difficulty >= 1 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-										<i class="bi {% if recipe.difficulty >= 2 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-										<i class="bi {% if recipe.difficulty >= 3 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-										<i class="bi {% if recipe.difficulty >= 4 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-										<i class="bi {% if recipe.difficulty >= 5 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-								</div>
-								<div class="recipe-duration col-6">
-										<i class="bi bi-clock"></i> {{ recipe.duration }} Minutes
-								</div>
-								<div class="recipe-description col-12">{{ recipe.description }}</div>
-								<ul class="recipe-content-list">
-										{% for note in notes %}
-										<li class="recipe-content-item">{{note.content}}</li>
-										{% endfor %}
-								</ul>
-								<div class="recipe-ingredients">
-										<ul>
-												<h3>Ingredients</h3>
-												{% for ingredient in ingredients.all %}
-												<li class="ingredient-item">{{ ingredient.text }}</li>
-												{% endfor %}
-										</ul>
-								</div>
-								<div class="recipe-steps">
-										<ul class="recipe-steps-list">
-												<h3>Preparation steps</h3>
-												{% for step in steps %}
-												<li class="recipe-steps-item">{{ step.text }}</li>
-												{% endfor %}
-										</ul>
-								</div>
-						</div>
-				</div>
-		</div>
-
+<div class="container my-5">
+    <!-- Recipe Hero -->
+    <div class="recipe-hero">
+        <div>
+            <h1 class="display-4 fw-bold mb-2">{{ recipe.name }}</h1>
+            <p class="lead mb-0">
+                <i class="bi bi-folder"></i> {{ recipe.category.name }}
+            </p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-10">
+            <!-- Recipe Meta Information -->
+            <div class="recipe-meta mb-3">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="recipe-meta-item">
+                            <i class="bi bi-clock"></i>
+                            <div>
+                                <small class="text-muted d-block">Tempo</small>
+                                <strong>{{ recipe.duration }} min</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="recipe-meta-item">
+                            <i class="bi bi-people"></i>
+                            <div>
+                                <small class="text-muted d-block">Porções</small>
+                                <strong>4 porções</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="recipe-meta-item">
+                            <i class="bi bi-speedometer2"></i>
+                            <div>
+                                <small class="text-muted d-block">Dificuldade</small>
+                                <div class="difficulty-badge">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= recipe.difficulty %}
+                                            <i class="bi bi-star-fill difficulty-star"></i>
+                                        {% else %}
+                                            <i class="bi bi-star difficulty-star empty"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Description -->
+            {% if recipe.description %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">
+                        <i class="bi bi-info-circle text-primary"></i> Descrição
+                    </h4>
+                    <p class="card-text">{{ recipe.description }}</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Ingredients -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">
+                        <i class="bi bi-basket text-success"></i> Ingredientes
+                    </h4>
+                    <div class="ingredients-list">
+                        {% for ingredient in ingredients %}
+                        <div class="ingredient-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ingredient{{ forloop.counter }}">
+                                <label class="form-check-label" for="ingredient{{ forloop.counter }}">
+                                    {{ ingredient.text }}
+                                </label>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted">Nenhum ingrediente adicionado ainda.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Preparation Steps -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">
+                        <i class="bi bi-list-ol text-danger"></i> Modo de Preparo
+                    </h4>
+                    {% for step in steps %}
+                    <div class="step-card">
+                        <div class="d-flex">
+                            <div class="step-number">{{ forloop.counter }}</div>
+                            <div class="flex-grow-1">
+                                <p class="mb-0">{{ step.text }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">Nenhum passo adicionado ainda.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Notes -->
+            {% if notes %}
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">
+                        <i class="bi bi-lightbulb text-warning"></i> Dicas e Observações
+                    </h4>
+                    {% for note in notes %}
+                    <div class="note-card">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-star-fill text-warning me-2"></i>
+                            <p class="mb-0">{{ note.content }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-2">
+            <div class="action-buttons">
+                <!-- Creator Card -->
+                <div class="creator-card mb-3">
+                    {% if recipe.creator.avatar %}
+                    <img src="{{ recipe.creator.avatar.url }}" alt="{{ recipe.creator.username }}" class="creator-avatar w-100">
+                    {% else %}
+                    <div class="creator-avatar w-100 d-flex align-items-center justify-content-center bg-secondary text-white mx-auto">
+                        <i class="bi bi-person fs-1"></i>
+                    </div>
+                    {% endif %}
+                    <h5 class="mb-1">{{ recipe.creator.first_name }} {{ recipe.creator.last_name }}</h5>
+                    <p class="text-muted small mb-3">Criado por</p>
+                    <a href="{% url 'profile' recipe.creator.id %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-person"></i> Ver Perfil
+                    </a>
+                </div>
+                
+                <!-- Action Buttons -->
+                {% if user_public.is_authenticated %}
+                    {% if user == recipe.creator or user_public.is_staff %}
+                    <a href="{% url 'editRecipe' recipe.id %}" class="btn btn-warning btn-action mb-3">
+                        <i class="bi bi-pencil"></i> Editar Receita
+                    </a>
+                    <button type="button" class="btn btn-danger btn-action mb-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <i class="bi bi-trash"></i> Excluir Receita
+                    </button>
+                    {% endif %}
+                    
+                    <button class="btn btn-outline-danger btn-action mb-3">
+                        <i class="bi bi-heart"></i> Salvar nos Favoritos
+                    </button>
+                    <button class="btn btn-outline-primary btn-action mb-3" id="shareBtn">
+                        <i class="bi bi-share"></i> Compartilhar
+                    </button>
+                    <button class="btn btn-outline-success btn-action mb-3" onclick="window.print()">
+                        <i class="bi bi-printer"></i> Imprimir
+                    </button>
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <a href="{% url 'login' %}">Entre</a> para salvar e interagir com esta receita.
+                    </div>
+                {% endif %}
+                
+                <!-- Recipe Info -->
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6 class="card-title">Informações</h6>
+                        <ul class="list-unstyled small">
+                            <li class="mb-2">
+                                <i class="bi bi-calendar text-muted"></i>
+                                Criado em {{ recipe.date_created|date:"d/m/Y" }}
+                            </li>
+                            {% if recipe.date_updated != recipe.date_created %}
+                            <li class="mb-2">
+                                <i class="bi bi-pencil text-muted"></i>
+                                Atualizado em {{ recipe.date_updated|date:"d/m/Y" }}
+                            </li>
+                            {% endif %}
+							{% if user_public.is_staff %}
+                            <li>
+                                <i class="bi bi-eye text-muted"></i>
+                                Status: {% if recipe.is_approved %}Aprovado{% else %}Pendente{% endif %}
+                            </li>
+							{% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Delete Modal -->
+<!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header bg-danger text-white">
-				<h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				Delete?
-			</div>
-			<div class="modal-footer">
-				<form method="POST" id="delete-form">
-					{% csrf_token %}
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-					<button type="submit" class="btn btn-danger">Yes, Delete</button>
-				</form>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle"></i> Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir a receita <strong>"{{ recipe.name }}"</strong>?</p>
+                <p class="text-danger"><i class="bi bi-info-circle"></i> Esta ação não pode ser desfeita!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form method="POST" action="{% url 'delete_recipe' recipe.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Sim, Excluir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
