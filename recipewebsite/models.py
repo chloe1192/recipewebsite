@@ -117,21 +117,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
-class Ingredient(models.Model):
-    """Common ingredient reference data.
-    
-    Used for categorizing and organizing recipe ingredients.
-    
-    Attributes:
-        name (str): Ingredient name (e.g., 'Tomato', 'Basil')
-    """
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-
 class Icons(models.Model):
     """Font Awesome icons for recipes and social media.
     

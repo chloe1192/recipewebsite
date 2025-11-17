@@ -7,7 +7,7 @@ filtered displays for better content management.
 """
 
 from django.contrib import admin
-from .models import Category, Ingredient, PreparationStep, Recipe, Note, RecipeIngredient, User, SocialMedia, Icons, Place
+from .models import Category, PreparationStep, Recipe, Note, RecipeIngredient, User, SocialMedia, Icons, Place
 
 
 # ============ INLINE EDITORS ============
@@ -110,7 +110,6 @@ class PlaceAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Note, NoteAdmin)
-admin.site.register(Ingredient)
 admin.site.register(User, UserAdmin)
 admin.site.register(Icons)
 admin.site.register(Place, PlaceAdmin)
