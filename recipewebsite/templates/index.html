@@ -31,8 +31,13 @@
 
         {% for recipe in recipes %}
         {% include 'recipe-card.html' %}
-        <!--- TODO Pages layout goes here -->
         {% endfor %}
+        {% if paginator.num_pages > 1 %}
+        {{ paginator.page_range }}
+        {% if recipes.has_previous %}<a href="?page={{ recipes.previous_page_number }}"><--</a>{% endif %}
+        <div class="col-12 d-flex justify-content-center my-4">{{ recipes.number }}</div>        
+        {% if recipes.has_next %}<a href="?page={{ recipes.next_page_number }}">--></a>{% endif %}
+        {% endif %}
 
     </div>
 </div>
