@@ -149,7 +149,7 @@ def recipe(request, pk):
 @login_required(login_url='/login')
 @ratelimit(key='user', rate='20/h', method='POST')
 @transaction.atomic
-def createRecipe(request):
+def recipe_create(request):
     """Create new recipe with ingredients and preparation steps.
     
     Rate limited to 20 recipes per hour per user.
@@ -199,7 +199,7 @@ def createRecipe(request):
 
 @login_required(login_url='/login')
 @transaction.atomic
-def editRecipe(request, pk):
+def recipe_update(request, pk):
     """Edit existing recipe (creator only).
     
     Requires authentication and recipe ownership.
@@ -291,7 +291,7 @@ def delete_recipe(request, pk):
 
 # ============ AUTHENTICATION ============
 
-def loginPage(request):
+def user_login(request):
     """User login view.
     
     Redirects authenticated users to index.
@@ -334,7 +334,7 @@ def loginPage(request):
     return render(request, 'login_register.html', context)
 
 
-def registerUser(request):
+def user_register(request):
     """User registration view.
     
     Redirects authenticated users to index.
@@ -371,7 +371,7 @@ def registerUser(request):
     return render(request, 'login_register.html', context)
 
 
-def logoutUser(request):
+def user_logout(request):
     """User logout view.
     
     Args:
@@ -388,7 +388,7 @@ def logoutUser(request):
 # ============ USER ACCOUNT ============
 
 @login_required(login_url='/login')
-def userAccount(request):
+def user_account(request):
     """Display current user's account page with their recipes.
     
     Requires authentication.
@@ -418,7 +418,7 @@ def userAccount(request):
 
 
 @login_required(login_url='/login')
-def editUser(request):
+def user_update(request):
     """Edit current user's profile information.
     
     Requires authentication.
@@ -456,7 +456,7 @@ def editUser(request):
     return render(request, 'edit_user.html', context)
 
 
-def userProfile(request, pk):
+def user_detail(request, pk):
     """Display user's public profile.
     
     Redirects to account page if viewing own profile.
