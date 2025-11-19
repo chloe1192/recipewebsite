@@ -13,10 +13,11 @@ For more information:
 """
 
 from django.contrib import admin
+from django.views.generic import RedirectView
 from django.urls import path
-from . import views
 from django.conf.urls.static import static
 from django.conf import settings
+from . import views
 
 app_name = "recipewebsite"
 
@@ -29,9 +30,10 @@ authentication_patterns = [
 
 # ============ BROWSE & DISPLAY ============
 browse_patterns = [
-    path('', views.index, name='index'),
-    path('<int:pk>/category/', views.category, name='category'),
-    path('<int:pk>/recipe/', views.recipe, name='recipe'),
+    path('', RedirectView.as_view(url='index/', permanent=True)),
+    path('index/', views.index, name='index'),
+    path('category/<int:pk>/', views.category, name='category'),
+    path('recipe/<int:pk>/', views.recipe, name='recipe'),
     path('search-recipes/', views.search_recipes, name='search-recipes'),
 ]
 
