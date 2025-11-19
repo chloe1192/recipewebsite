@@ -194,7 +194,14 @@ class Recipe(models.Model):
             resize_and_crop_image(self.sliderImg.path, (1920, 1080))
         if self.img:
             resize_and_crop_image(self.img.path, (1920, 1080))
-
+    
+    def delete(self):
+        if self.img:
+            self.img.delete()
+        if self.sliderImg:
+            self.sliderImg.delete()
+        super().delete()
+    
     def __str__(self):
         return self.name
 
