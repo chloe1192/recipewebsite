@@ -165,8 +165,8 @@
                 </div>
                 
                 <!-- Action Buttons -->
-                {% if user_public.is_authenticated %}
-                    {% if user == recipe.creator or user_public.is_staff %}
+                {% if request.user.is_authenticated %}
+                    {% if request.user == recipe.creator or request.user.is_staff %}
                     <a href="{% url 'editRecipe' recipe.id %}" class="btn btn-warning btn-action mb-3">
                         <i class="bi bi-pencil"></i> Editar Receita
                     </a>
@@ -206,7 +206,7 @@
                                 Atualizado em {{ recipe.date_updated|date:"d/m/Y" }}
                             </li>
                             {% endif %}
-							{% if user_public.is_staff %}
+							{% if request.user.is_staff %}
                             <li>
                                 <i class="bi bi-eye text-muted"></i>
                                 Status: {% if recipe.is_approved %}Aprovado{% else %}Pendente{% endif %}
