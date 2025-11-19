@@ -16,7 +16,7 @@
 </head>
 <body>
     {% block header %}{% include "header.html" %}{% endblock %}
-    <div class="page-content">
+    <div class="page-content {{ request.path|slice:'1:-1' }}-page">
         {% block content %}{% endblock %}
     </div>
     {% block footer %}{% include "footer.html" %}{% endblock %}
