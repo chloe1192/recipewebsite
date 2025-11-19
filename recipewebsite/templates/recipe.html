@@ -16,8 +16,8 @@
     <!-- Recipe Hero -->
     <div class="recipe-hero">
         <div>
-			<!-- TODO Photo goes here -->
             <h1 class="display-4 fw-bold mb-2">{{ recipe.name }}</h1>
+			<img src="{{ recipe.sliderImg.url }}" alt="{{ recipe.name }}" class="recipe-photo mb-4 w-100"/>
             <p class="lead mb-0">
                 <i class="bi bi-folder"></i> {{ recipe.category.name }}
             </p>
