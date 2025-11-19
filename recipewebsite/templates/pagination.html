@@ -1,0 +1,39 @@
+<ul class="pagination d-flex justify-content-center mt-4">
+    {% if recipes.has_previous %}
+    <li class="page-item">
+        <a
+            class="page-link"
+            href="?page={{ recipes.previous_page_number }}"
+            aria-label="Previous"
+        >
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+        </a>
+    </li>
+    <li class="page-item">
+        <a class="page-link" href="?page={{ recipes.previous_page_number }}"
+            >{{ recipes.previous_page_number }}</a
+        >
+    </li>
+    {% endif %}
+    <li class="page-item">
+        <a class="page-link active" href="#">{{ recipes.number }}</a>
+    </li>
+    {% if recipes.has_next %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ recipes.next_page_number }}"
+            >{{ recipes.next_page_number }}</a
+        >
+    </li>
+    <li class="page-item">
+        <a
+            class="page-link"
+            href="?page={{ recipes.next_page_number }}"
+            aria-label="Next"
+        >
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+        </a>
+    </li>
+    {% endif %}
+</ul>
