@@ -1,22 +1,36 @@
 <div class="col-12 col-lg-4 recipe-card-col">
     <div class="card recipe-card mb-4">
         <a href="{% url 'recipe' recipe.id %}">
-            <img 
+            <img
                 class="recipe-photo col-12"
-                src="{{ recipe.img.url }}" 
+                src="{{ recipe.img.url }}"
                 alt="Imagem de {{ recipe.name }}"
             />
+
             <div class="">
                 <h1 class="recipe-title">{{ recipe.name }}</h1>
                 <div class="recipe-difficulty">
                     Dificuldade
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= recipe.difficulty %}
+                            <i class="bi bi-mortarboard-fill difficulty-star"></i>
+                        {% else %}
+                            <i class="bi bi-mortarboard difficulty-star empty"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <!--
+                TODO user this layout for reviews
+                <div class="recipe-difficulty">
+                    Dificuldade
                     <br>
+                    
                     <i class="bi {% if recipe.difficulty >= 1 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                     <i class="bi {% if recipe.difficulty >= 2 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                     <i class="bi {% if recipe.difficulty >= 3 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                     <i class="bi {% if recipe.difficulty >= 4 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                     <i class="bi {% if recipe.difficulty >= 5 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                </div>
+                </div>-->
                 <div class="recipe-duration">
                     <i class="bi bi-clock"></i> {{ recipe.duration }} Minutos
                 </div>
