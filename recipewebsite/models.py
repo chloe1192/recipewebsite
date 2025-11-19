@@ -196,6 +196,7 @@ class Recipe(models.Model):
             resize_and_crop_image(self.img.path, (1920, 1080))
     
     def delete(self):
+        """"Delete recipe and remove associated images from storage."""
         if self.img:
             self.img.delete()
         if self.sliderImg:
