@@ -215,6 +215,11 @@
                         </ul>
                     </div>
                 </div>
+                <form method="POST" enctype="multipart/form-data" id="reviewForm" action="{% url 'review_create' recipe.id %}">
+                    {% csrf_token %}
+                    <!-- TODO recipe review form -->
+                    <label for="{}">
+                </form>
             </div>
         </div>
     </div>

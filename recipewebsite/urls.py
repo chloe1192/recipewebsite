@@ -49,6 +49,9 @@ recipe_patterns = [
     path('recipe/<int:pk>/delete/', views.delete_recipe, name='delete_recipe'),
 ]
 
+review_patterns = [
+    path('review_create/<int:pk>/', views.review_create, name="review_create")
+]
 # ============ ADMIN ============
 admin_patterns = [
     path('admin/', admin.site.urls),
@@ -60,7 +63,8 @@ urlpatterns = (
     browse_patterns + 
     account_patterns + 
     recipe_patterns + 
-    admin_patterns
+    admin_patterns +
+    review_patterns
 )
 
 # Static and media files (development only)

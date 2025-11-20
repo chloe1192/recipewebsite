@@ -21,7 +21,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
 from django_ratelimit.decorators import ratelimit
-from .forms import CreateRecipeForm, CustomUserChangeForm, CustomUserCreationForm, IngredientsFormSet, PreparationStepFormSet
+from .forms import CreateRecipeForm, CustomUserChangeForm, CustomUserCreationForm, IngredientsFormSet, PreparationStepFormSet, ReviewForm
 from .models import Category, Recipe, Note, PreparationStep, RecipeIngredient, SocialMedia
 from .models import User
 from django.db.models import Q
@@ -132,14 +132,16 @@ def recipe(request, pk):
         Http404: If recipe does not exist
     """
     recipe = get_object_or_404(Recipe, pk=pk)
-    notes = Note.objects.filter(recipe_id=pk)
+    notes = Note.objects.filter(recipe_id=pk).select_related('recipe')
     steps = PreparationStep.objects.filter(recipe_id=pk).order_by('sequence')
     ingredients = RecipeIngredient.objects.filter(recipe=pk)
+    review_form = ReviewForm()
     context = {
         "recipe": recipe,
         "notes": notes,
         "steps": steps,
-        "ingredients": ingredients
+        "ingredients": ingredients,
+        "review_form": review_form
     }
     return render(request, "recipe.html", context)
 
@@ -383,7 +385,22 @@ def user_logout(request):
     logout(request)
     return redirect('index')
 
-# TODO delete account view
+@login_required(login_url='/login')
+def user_delete(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        if request.user == user or request.user.is_staff:
+            user.delete()
+            messages.success(request, "Usuário deletado com sucesso!")
+            return redirect('index')
+        if request.user != user and not request.user.is_staff:
+            messages.error(request, "Você não pode deletar esse usuário!")
+            return redirect('profile', pk=pk)
+    else:
+        context = {'user': user}
+        return render(request, 'user_delete.html', context)
+    
+    
 
 # ============ USER ACCOUNT ============
 
@@ -487,8 +504,15 @@ def user_detail(request, pk):
 # ============ REVIEWS ============
 
 @login_required(login_url='/login')
-def review_create(request):
-    pass
+def review_create(request, recipe):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.recipe = recipe
+    else:
+        return redirect('recipe', pk=recipe.pk)
 
 @login_required(login_url='/login')
 def review_update(request, pk):

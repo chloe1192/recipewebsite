@@ -10,7 +10,7 @@ Forms handle validation and rendering for:
 
 from django import forms
 from django.forms import ModelForm, inlineformset_factory
-from .models import Recipe, RecipeIngredient, PreparationStep
+from .models import Recipe, RecipeIngredient, PreparationStep, Review
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import User
 
@@ -192,3 +192,9 @@ class CustomUserChangeForm(UserChangeForm):
                 'class': 'form-control',
                 'placeholder': field.label
             })
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ["rating", "comment"]
+        

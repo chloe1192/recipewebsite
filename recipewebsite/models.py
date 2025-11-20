@@ -281,3 +281,22 @@ class SocialMedia(models.Model):
 
     def __str__(self):
         return self.link
+
+class Review(models.Model):
+    """User reviews and ratings for recipes.
+    
+    Attributes:
+        rating (int): Rating score 1-5
+        comment (str): Review comment
+        recipe (ForeignKey): Reviewed recipe
+        user (ForeignKey): User who wrote the review
+    """
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    comment = models.TextField(null=True, blank=True)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Review by {self.user.email} for {self.recipe.name}"
