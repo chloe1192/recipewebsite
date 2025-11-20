@@ -22,7 +22,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
 from django_ratelimit.decorators import ratelimit
 from .forms import CreateRecipeForm, CustomUserChangeForm, CustomUserCreationForm, IngredientsFormSet, PreparationStepFormSet, ReviewForm
-from .models import Category, Recipe, Note, PreparationStep, RecipeIngredient, SocialMedia
+from .models import Category, Recipe, Note, PreparationStep, RecipeIngredient, Review, SocialMedia
 from .models import User
 from django.db.models import Q
 
@@ -516,18 +516,38 @@ def review_create(request, recipe):
 
 @login_required(login_url='/login')
 def review_update(request, pk):
-    pass
-
-@login_required(login_url='/login')
-def review_list(request, pk=None):
-    if pk:
-        # find single review
-        pass
+    instance = get_object_or_404(Review, pk=pk)    
+    form = ReviewForm(instance=instance)
+    
+    if request.method == "POST":
+        if form.is_valid():
+            form.save
+            return redirect('recipe', pk=instance.recipe)
     else:
-        # list all reviews
-        pass
-    pass
+        return redirect('recipe', pk=instance)
 
 @login_required(login_url='/login')
-def review_delete(request, pk):
-    pass
+def review_list(request, recipe, pk=None):
+    context = {}
+    reviews = Review.objects.filter(recipe=recipe)
+    
+    if pk:
+        review = review.object.filter(pk=pk)
+        context = {
+            "review": review,
+            "reviews": ""
+        }
+    else:
+        context = {
+            "review": "",
+            "reviews": reviews
+        }
+    
+    return context
+
+@login_required(login_url='/login')
+def review_delete(request, recipe, pk):
+    if request.method == "POST":
+        review = get_object_or_404(Review, pk=pk)
+        review.delete()
+        return redirect('recipe', pk=recipe)
