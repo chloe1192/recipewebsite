@@ -297,6 +297,7 @@ class Review(models.Model):
     comment = models.TextField(null=True, blank=True)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Review by {self.user.email} for {self.recipe.name}"

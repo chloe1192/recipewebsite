@@ -143,6 +143,39 @@
                 </div>
             </div>
             {% endif %}
+            
+            <!-- Reviews -->
+            {% if reviews %}
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">
+                        <i class="bi bi-lightbulb text-warning"></i> Comentarios
+                    </h4>
+                    {% for review in reviews %}
+                    <div class="note-card">
+                        <a href="{% url 'profile' review.user.id %}" >{{ review.user.first_name }} {{ review.user.last_name|slice:"0:1"}}.</a>
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-star {% if review.rating >= 1 %}bi-star-fill{% endif %} text-warning me-2"></i>
+                            <i class="bi bi-star {% if review.rating >= 2 %}bi-star-fill{% endif %} text-warning me-2"></i>
+                            <i class="bi bi-star {% if review.rating >= 3 %}bi-star-fill{% endif %} text-warning me-2"></i>
+                            <i class="bi bi-star {% if review.rating >= 4 %}bi-star-fill{% endif %} text-warning me-2"></i>
+                            <i class="bi bi-star {% if review.rating >= 5 %}bi-star-fill{% endif %} text-warning me-2"></i>
+                            <p class="mb-0">{{ review.comment }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    {% if request.user.is_authenticated %}
+                    <form method="POST" enctype="multipart/form-data" id="reviewForm" action="{% url 'review_create' recipe.id %}">
+                        {% csrf_token %}
+                        <!-- TODO recipe review form -->
+                        <label for="{{review_form.comment.id_for_label}}">{{ review_form.comment.label }}</label>
+                        {{review_form.comment}}
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
         </div>
         
         <!-- Sidebar -->
@@ -215,11 +248,6 @@
                         </ul>
                     </div>
                 </div>
-                <form method="POST" enctype="multipart/form-data" id="reviewForm" action="{% url 'review_create' recipe.id %}">
-                    {% csrf_token %}
-                    <!-- TODO recipe review form -->
-                    <label for="{}">
-                </form>
             </div>
         </div>
     </div>

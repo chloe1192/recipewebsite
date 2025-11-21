@@ -136,7 +136,9 @@ def recipe(request, pk):
     steps = PreparationStep.objects.filter(recipe_id=pk).order_by('sequence')
     ingredients = RecipeIngredient.objects.filter(recipe=pk)
     review_form = ReviewForm()
+    reviews = review_list(request=request, recipe=recipe)
     context = {
+        "reviews": reviews,
         "recipe": recipe,
         "notes": notes,
         "steps": steps,
@@ -526,24 +528,10 @@ def review_update(request, pk):
     else:
         return redirect('recipe', pk=instance)
 
-@login_required(login_url='/login')
-def review_list(request, recipe, pk=None):
-    context = {}
+def review_list(request, recipe):
     reviews = Review.objects.filter(recipe=recipe)
     
-    if pk:
-        review = review.object.filter(pk=pk)
-        context = {
-            "review": review,
-            "reviews": ""
-        }
-    else:
-        context = {
-            "review": "",
-            "reviews": reviews
-        }
-    
-    return context
+    return reviews
 
 @login_required(login_url='/login')
 def review_delete(request, recipe, pk):
