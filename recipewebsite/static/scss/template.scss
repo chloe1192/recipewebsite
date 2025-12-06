@@ -445,7 +445,8 @@ ul {
 }
 
 /* Form */
-.form-signin {
+.form-signin,
+.form-signup {
     width: 100%;
     max-width: 330px;
     padding: 15px;
@@ -453,6 +454,10 @@ ul {
     border: 1px solid #aaa;
     border-radius: 10px;
     box-shadow: 3px 3px #eee;
+}
+
+.form-signup {
+    max-width: 650px;
 }
 
 /* Star Rating */

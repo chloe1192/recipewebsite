@@ -18,6 +18,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from recipewebsite import views
+from django.contrib.auth import views as auth_views
 
 # ============ AUTHENTICATION ============
 authentication_patterns = [
@@ -40,6 +41,7 @@ account_patterns = [
     path('account/', views.user_account, name='account'),
     path('account/edit/', views.user_update, name='edit'),
     path('profile/<int:pk>/', views.user_detail, name='profile'),
+    path('reset_password/', auth_views.PasswordResetView.as_view(template_name="password_reset.html"), name='reset_password')
 ]
 
 # ============ RECIPE MANAGEMENT ============

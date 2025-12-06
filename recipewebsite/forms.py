@@ -148,9 +148,9 @@ class CustomUserCreationForm(UserCreationForm):
         password2 (CharField): Password confirmation
     """
     email = forms.EmailField(widget=forms.TextInput(attrs={"class": "form-control"}))
-    first_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}))
-    last_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}))
-
+    first_name = forms.CharField(required=False, widget=forms.TextInput(attrs={"class": "form-control"}))
+    last_name = forms.CharField(required=False, widget=forms.TextInput(attrs={"class": "form-control"}))
+    
     class Meta:
         model = User
         fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']

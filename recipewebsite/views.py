@@ -317,22 +317,22 @@ def user_login(request):
         return redirect('index')
 
     if request.method == 'POST':
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
 
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
             messages.error(request, 'Usuário não existe')
             user = None
 
         if user is not None:
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
+            auth = authenticate(request, email=email, password=password)
+            if auth is not None:
+                login(request, auth)
                 return redirect('index')
             else:
-                messages.error(request, 'Usuário ou senha incorretos')
+                messages.error(request, 'Senha incorreta')
 
     context = {'page': page}
     return render(request, 'login_register.html', context)
@@ -367,7 +367,8 @@ def user_register(request):
             login(request, user)
             return redirect('index')
         else:
-            messages.error(request, 'Ocorreu um erro. Verifique todos os campos')
+            for key, value in form.errors.items():
+                messages.error(request, value)
     context = {
         'form': form,
         'page': page
@@ -386,6 +387,9 @@ def user_logout(request):
     """
     logout(request)
     return redirect('index')
+
+def reset_password(request):
+    pass
 
 @login_required(login_url='/login')
 def user_delete(request, pk):

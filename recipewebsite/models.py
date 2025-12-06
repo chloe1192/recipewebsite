@@ -88,17 +88,30 @@ class User(AbstractUser):
     Methods:
         save(): Auto-resizes avatar to 512x512 on save
     """
-    first_name = models.CharField(max_length=150, null=True)
-    last_name = models.CharField(max_length=150, blank=True, null=True)
-    username = models.CharField(max_length=200, null=True, unique=True, default=None)
-    email = models.EmailField(unique=True)
+    first_name = models.CharField(
+        max_length=150, 
+        null=True, 
+        blank=True, 
+        default="")
+    last_name = models.CharField(max_length=150, blank=True, null=True, default="")
+    username = models.CharField(
+        max_length=200, 
+        null=False, 
+        unique=True,
+        error_messages = {
+            'unique': ('Já existe um usuário com esse nome')
+        }
+    )
+    email = models.EmailField(unique=True,
+        error_messages = {
+            'unique': ('Já existe um usuário com esse email')
+        })
     bio = models.TextField(null=True, default=None, blank=True)
     avatar = models.ImageField(default='default.png', upload_to='profile_images')
     city = models.ForeignKey(Place, null=True, on_delete=models.RESTRICT, blank=True, default=None)
     phone = models.CharField(max_length=255, null=True, default=None, blank=True)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name',  'password']
+    REQUIRED_FIELDS = ['password']
 
     def save(self, *args, **kwargs):
         """Save user and auto-resize avatar to 512x512."""
