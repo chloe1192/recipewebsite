@@ -5,7 +5,7 @@
 
     <div class="row">
         {% if page == 'login' %}
-        <form class="form-signin" method="POST" action="">
+        <form class="form form-signin" method="POST" action="">
             {% csrf_token %}
             {% for message in messages %}
                 <div class="alert alert-danger">
@@ -25,13 +25,17 @@
                 <button type="submit" class="btn btn-primary">Entrar</button>
             </div>            
             <div class="form-group">
-                <label><a href="{% url 'register' %}">Criar conta</a></label>
-                <label><a href="{% url 'reset_password' %}">Esqueci minha senha</a></label>
+                <label class="float-start">
+                    <a href="{% url 'register' %}">Criar conta</a>
+                </label>
+                <label class="float-end">
+                    <a href="{% url 'reset_password' %}">Esqueci minha senha</a>
+                </label>
             </div>
             
         </form>
         {% elif page == 'register' %}
-        <form class="form-signup" method="POST" action="">
+        <form class="form form-signup" method="POST" action="">
             {% csrf_token %}
             {{ form.non_field_errors }}
             {% for message in messages %}

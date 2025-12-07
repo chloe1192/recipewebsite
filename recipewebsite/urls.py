@@ -41,7 +41,10 @@ account_patterns = [
     path('account/', views.user_account, name='account'),
     path('account/edit/', views.user_update, name='edit'),
     path('profile/<int:pk>/', views.user_detail, name='profile'),
-    path('reset_password/', auth_views.PasswordResetView.as_view(template_name="password_reset.html"), name='reset_password')
+    path('reset_password/', auth_views.PasswordResetView.as_view(template_name="reset_password.html"), name='reset_password'),
+    path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(template_name="reset_password.html"), name='password_reset_done'),
+    path('reset_password_confirm/', auth_views.PasswordResetConfirmView.as_view(template_name="reset_password_confirm.html"), name='reset_password_confirm'),
+    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="reset_password_confirm.html"), name='reset_password_complete')
 ]
 
 # ============ RECIPE MANAGEMENT ============

@@ -8,6 +8,7 @@
     --danger-color: #ff6b6b;
     --dark-color: #2c3e50;
     --light-color: #f8f9fa;
+    --lighter-color: #fff;
     --light-gray: #dfdfdf;
     --border-radius: 10px;
     --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -445,15 +446,23 @@ ul {
 }
 
 /* Form */
-.form-signin,
-.form-signup {
+.form {
+    background-color: var(--lighter-color);
     width: 100%;
     max-width: 330px;
     padding: 15px;
     margin: 0 auto;
     border: 1px solid #aaa;
     border-radius: 10px;
-    box-shadow: 3px 3px #eee;
+    box-shadow: 3px 3px 10px var(--box-shadow-primary);
+
+    .btn {
+        margin-top: 1rem;
+    }
+}
+
+.form-reset-password {
+    max-width: 650px;
 }
 
 .form-signup {
