@@ -43,19 +43,26 @@ account_patterns = [
     path('profile/<int:pk>/', views.user_detail, name='profile'),
     path('reset_password/', auth_views.PasswordResetView.as_view(template_name="reset_password.html"), name='reset_password'),
     path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(template_name="reset_password.html"), name='password_reset_done'),
-    path('reset_password_confirm/', auth_views.PasswordResetConfirmView.as_view(template_name="reset_password_confirm.html"), name='reset_password_confirm'),
-    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="reset_password_confirm.html"), name='reset_password_complete')
+    path(
+    'password_reset_confirm/<uidb64>/<token>/',
+    auth_views.PasswordResetConfirmView.as_view(template_name="reset_password_confirm.html"),
+    name='password_reset_confirm'
+),
+    path('password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="reset_password_confirm.html"), name='password_reset_complete'),
+    path('change_password', views.password_change, name='password_change')
 ]
 
 # ============ RECIPE MANAGEMENT ============
 recipe_patterns = [
     path('recipe/create/', views.recipe_create, name='create_recipe'),
-    path('recipe/<int:pk>/edit/', views.recipe_update, name='editRecipe'),
+    path('recipe/<int:pk>/edit/', views.recipe_update, name='recipe_edit'),
     path('recipe/<int:pk>/delete/', views.delete_recipe, name='delete_recipe'),
+    path('recipe/<int:pk>/favorite/', views.favorite_toggle, name='favorite_toggle'),
 ]
 
 review_patterns = [
-    path('review_create/<int:pk>/', views.review_create, name="review_create")
+    path('review_create/<int:pk>/', views.review_create, name="review_create"),
+    path('review_delete/<int:pk>/', views.review_delete, name='review_delete')
 ]
 # ============ ADMIN ============
 admin_patterns = [

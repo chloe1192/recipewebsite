@@ -16,7 +16,8 @@ data consistency.
 import logging
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
@@ -84,6 +85,8 @@ def index(request):
         "recipes": recipes,
         "paginator": paginator
     }
+    for r in recipes:
+        r.average_rating = round(r.get_review_average_rating())
     return render(request, "index.html", context)
 
 
@@ -292,6 +295,14 @@ def delete_recipe(request, pk):
     context = {'recipe': recipe}
     return render(request, 'delete_recipe.html', context)
 
+@login_required(login_url='/login')
+def favorite_toggle(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
+    if request.user in recipe.favorited_by.all():
+        recipe.favorited_by.remove(request.user)
+    else:
+        recipe.favorited_by.add(request.user)
+    return redirect('recipe', pk=pk)
 
 # ============ AUTHENTICATION ============
 
@@ -468,8 +479,8 @@ def user_update(request):
             messages.success(request, "Profile updated successfully!")
             return redirect('account')
         else:
-            messages.error(request, "There are errors in the form")
-            logger.error(f"Profile form errors: {profile_form.errors}")
+            for key, value in profile_form.errors.items():
+                messages.error(request, value)
     
     context = {
         'profile_form': profile_form,
@@ -507,18 +518,44 @@ def user_detail(request, pk):
     }
     return render(request, 'profile.html', context)
 
+@login_required(login_url='/login')
+def password_change(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('/account')
+        else:
+            for k, v in form.error_messages.items():
+                if not k == 'password_mismatch':
+                    messages.error(request, v)
+            
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {form: 'form'})
+    
+
 # ============ REVIEWS ============
 
 @login_required(login_url='/login')
-def review_create(request, recipe):
+def review_create(request, pk):
+    recipe = Recipe.objects.get(pk=pk)
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
+            print(form)
             review = form.save(commit=False)
             review.user = request.user
             review.recipe = recipe
+            review.save()
+            messages.success(request, 'Avaliacao publicada com sucesso')
+            return redirect('/recipe/' + str(recipe.id))
+        else:
+            messages.error(request, form.errors)
+            return redirect('/recipe/' + str(recipe.id))
     else:
-        return redirect('recipe', pk=recipe.pk)
+        return redirect('/recipe/' + str(recipe.id))
 
 @login_required(login_url='/login')
 def review_update(request, pk):
@@ -538,8 +575,8 @@ def review_list(request, recipe):
     return reviews
 
 @login_required(login_url='/login')
-def review_delete(request, recipe, pk):
-    if request.method == "POST":
-        review = get_object_or_404(Review, pk=pk)
-        review.delete()
-        return redirect('recipe', pk=recipe)
+def review_delete(request, pk):
+    review = get_object_or_404(Review, pk=pk)
+    recipe = review.recipe
+    review.delete()
+    return redirect('recipe', pk=recipe.id)
