@@ -87,6 +87,7 @@ def index(request):
     }
     for r in recipes:
         r.average_rating = round(r.get_review_average_rating())
+        print(r.average_rating)
     return render(request, "index.html", context)
 
 

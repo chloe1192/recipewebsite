@@ -210,8 +210,10 @@
                         </div>
                         
                         {% endfor %}
-                    {% endif %}
+                    {% else %}
                         <p class="text-muted">Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                    {% endif %}
+                    
                     <hr>
                     {% if request.user.is_authenticated %}
                     <form class="" method="POST" enctype="multipart/form-data" id="reviewForm" action="{% url 'review_create' recipe.id %}">
