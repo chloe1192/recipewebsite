@@ -55,8 +55,10 @@
 						<div class="star-rating">
 							{% for value, label in form.difficulty.field.choices reversed %}
 								<input type="radio" id="star{{ value }}" name="difficulty" value="{{ value }}"
-    								{% if form.difficulty.value != None and form.difficulty.value|stringformat:"i" == value|stringformat:"i" %}checked{% endif %}>
-								<label for="star{{ value }}" title="{{ label }}">★</label>
+									{% if form.difficulty.value != None and form.difficulty.value|stringformat:"i" == value|stringformat:"i" %}checked{% endif %}>
+								<label for="star{{ value }}" title="{{ label }}">
+									<i class="bi bi-mortarboard-fill"></i>
+								</label>
 							{% endfor %}
 						</div>
 					</div>
@@ -67,12 +69,15 @@
 
 
 			<div class="mb-3">
-				<label for="{{ form.duration.id_for_label }}" class="form-label">Duração (minutos)</label>
-					{{ form.duration|add_class:"form-control" }}
-					{% if form.duration.errors %}
-						<div class="invalid-feedback d-block">{{ form.duration.errors|striptags }}</div>
-					{% endif %}
+				<label for="{{ form.duration.id_for_label }}" class="form-label">Tempo de Preparo</label>
+				<div class="input-group">
+					{{ form.duration|add_class:"form-control"|attr:"min:1"|attr:"type:number" }}
+					<span class="input-group-text">minutos</span>
 				</div>
+				{% if form.duration.errors %}
+					<div class="invalid-feedback d-block">{{ form.duration.errors|striptags }}</div>
+				{% endif %}
+			</div>
 
 			<div class="mb-3">
 				<label for="{{ form.description.id_for_label }}" class="form-label">Descrição</label>
@@ -134,7 +139,7 @@
 						<td>{{ ingredients_formset.empty_form.sequence|add_class:"form-control" }}</td>
 						<td>
 							<button type="button" class="remove-form btn btn-outline-danger btn-sm">
-								<i class="bi bi-trash"></i> Remove
+								<i class="bi bi-trash"></i> Remover
 							</button>
 						</td>
 					</tr>
