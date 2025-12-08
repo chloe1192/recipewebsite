@@ -79,13 +79,17 @@ class RecipeIngredientForm(forms.ModelForm):
         model = RecipeIngredient
         fields = "__all__"
         widgets = {
-            'text': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 2,
-                'placeholder': 'Enter ingredient',
-                'required': 'required',
-            }),
+                'text': forms.Textarea(attrs={
+                    'class': 'form-control',
+                    'rows': 2,
+                    'placeholder': 'Digite o ingrediente',
+                    'required': 'required',
+                }),
             'sequence': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'text': 'Ingrediente',
+            'sequence': 'Ordem'
         }
 
 
@@ -102,13 +106,17 @@ class PreparationStepForm(forms.ModelForm):
         model = PreparationStep
         fields = "__all__"
         widgets = {
-            'text': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 3,
-                'placeholder': 'Enter preparation step',
-                'required': 'required',
-            }),
+                'text': forms.Textarea(attrs={
+                    'class': 'form-control',
+                    'rows': 3,
+                    'placeholder': 'Descreva o passo de preparo',
+                    'required': 'required',
+                }),
             'sequence': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'text': 'Passo de preparo',
+            'sequence': 'Ordem'
         }
 
 
@@ -146,13 +154,12 @@ class CustomUserCreationForm(UserCreationForm):
         password1 (CharField): Password
         password2 (CharField): Password confirmation
     """
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Digite seu E-Mail"}))
-    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Escolhe seu nome de usuario'}))
-    first_name = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder": "Digite seu nome"}))
-    last_name = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder": "Digite seu sobrenome"}))
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Escolhe a sua senha'}))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Digite novamente a sua senha'}))
-    # TODO add labels to all inputs
+    email = forms.EmailField(label = 'E-mail', widget=forms.EmailInput(attrs={"placeholder": "Digite seu E-Mail"}))
+    username = forms.CharField(label = 'Nome de usuario',widget=forms.TextInput(attrs={'placeholder': 'Escolhe seu nome de usuario'}))
+    first_name = forms.CharField(label = 'Nome',required=False, widget=forms.TextInput(attrs={"placeholder": "Digite seu nome"}))
+    last_name = forms.CharField(label = 'Sobrenome',required=False, widget=forms.TextInput(attrs={"placeholder": "Digite seu sobrenome"}))
+    password1 = forms.CharField(label = 'Senha',widget=forms.PasswordInput(attrs={'placeholder': 'Escolhe a sua senha'}))
+    password2 = forms.CharField(label = 'Confirmar senha',widget=forms.PasswordInput(attrs={'placeholder': 'Digite novamente a sua senha'}))
     
     class Meta:
         model = User
@@ -202,8 +209,14 @@ class CustomUserChangeForm(UserChangeForm):
 
 class ReviewForm(forms.ModelForm):
 
-    comment = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Digite seu comentário', 'class': 'form-control'}))
-    
+    comment = forms.CharField(
+        label='Comentário',
+        widget=forms.Textarea(attrs={'placeholder': 'Digite seu comentário', 'class': 'form-control'})
+    )
     class Meta:
         model = Review
         fields = ["rating", "comment"]
+        labels = {
+            "rating": "Avaliação",
+            "comment": "Comentário"
+        }
