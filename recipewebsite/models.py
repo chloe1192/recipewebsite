@@ -18,9 +18,14 @@ Models:
 import logging
 from PIL import Image
 from django.db import models
+from django.db.models import Avg
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.forms import ValidationError
 from location_field.models.plain import PlainLocationField
+import re
+
+from recipewebsite import settings
 
 logger = logging.getLogger(__name__)
 
@@ -98,11 +103,14 @@ class User(AbstractUser):
         max_length=200, 
         null=False, 
         unique=True,
+        help_text= 'Escolha um nome de usuario',
         error_messages = {
             'unique': ('Já existe um usuário com esse nome')
         }
     )
-    email = models.EmailField(unique=True,
+    email = models.EmailField(
+        unique=True,
+        help_text = "Digite seu email",
         error_messages = {
             'unique': ('Já existe um usuário com esse email')
         })
@@ -111,8 +119,15 @@ class User(AbstractUser):
     city = models.ForeignKey(Place, null=True, on_delete=models.RESTRICT, blank=True, default=None)
     phone = models.CharField(max_length=255, null=True, default=None, blank=True)
 
-    REQUIRED_FIELDS = ['password']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'password']
 
+    def clean(self, *args, **kwargs):
+        # Não aceita espaços ou caracteres não permitidos em URLs
+        if not re.match(r'^[A-Za-z0-9_-]+$', self.username):
+            raise ValidationError({'username': 'O nome de usuário só pode conter letras, números, hífen e underline'})
+        return super().clean()
+    
     def save(self, *args, **kwargs):
         """Save user and auto-resize avatar to 512x512."""
         super().save(*args, **kwargs)
@@ -190,6 +205,11 @@ class Recipe(models.Model):
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     is_highlight = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
+    favorited_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='favorite_recipes',
+        blank=True
+    )
 
     class Meta:
         # Ordenar por mais recente primeiro
@@ -199,6 +219,11 @@ class Recipe(models.Model):
             models.Index(fields=['-date_updated']),
             models.Index(fields=['creator', 'is_approved']),
         ]
+    
+    def get_review_average_rating(self):
+        avg = Review.objects.filter(recipe=self).aggregate(Avg('rating'))['rating__avg']
+        print(self.name , ' rating ', avg)
+        return avg or 0
     
     def save(self, *args, **kwargs):
         """Save recipe and auto-resize images to target dimensions."""
@@ -311,6 +336,6 @@ class Review(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    
     def __str__(self):
         return f"Review by {self.user.email} for {self.recipe.name}"

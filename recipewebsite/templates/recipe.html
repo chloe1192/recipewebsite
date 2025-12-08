@@ -54,7 +54,6 @@
                             <div>
                                 <small class="text-muted d-block">Dificuldade</small>
                                 <div class="difficulty-badge">
-									<!-- TODO Change style to something else ***knife emoji**** -->
                                     {% for i in "12345" %}
                                         {% if forloop.counter <= recipe.difficulty %}
                                             <i class="bi bi-mortarboard-fill difficulty-star"></i>
@@ -145,37 +144,141 @@
             {% endif %}
             
             <!-- Reviews -->
-            {% if reviews %}
-            <div class="card">
+            <div class="card shadow-sm mb-4">
                 <div class="card-body">
-                    <h4 class="card-title mb-3">
-                        <i class="bi bi-lightbulb text-warning"></i> Comentarios
+                    <h4 class="card-title mb-4">
+                        <i class="bi bi-chat-dots text-primary"></i> Comentários
                     </h4>
-                    {% for review in reviews %}
-                    <div class="note-card">
-                        <a href="{% url 'profile' review.user.id %}" >{{ review.user.first_name }} {{ review.user.last_name|slice:"0:1"}}.</a>
-                        <div class="d-flex align-items-start">
-                            <i class="bi bi-star {% if review.rating >= 1 %}bi-star-fill{% endif %} text-warning me-2"></i>
-                            <i class="bi bi-star {% if review.rating >= 2 %}bi-star-fill{% endif %} text-warning me-2"></i>
-                            <i class="bi bi-star {% if review.rating >= 3 %}bi-star-fill{% endif %} text-warning me-2"></i>
-                            <i class="bi bi-star {% if review.rating >= 4 %}bi-star-fill{% endif %} text-warning me-2"></i>
-                            <i class="bi bi-star {% if review.rating >= 5 %}bi-star-fill{% endif %} text-warning me-2"></i>
-                            <p class="mb-0">{{ review.comment }}</p>
-                        </div>
-                    </div>
-                    {% endfor %}
                     
+                    {% if reviews %}
+                        {% for review in reviews %}
+                        <div class="border-bottom pb-3 mb-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <a href="{% url 'profile' review.user.id %}" class="fw-semibold text-decoration-none me-2">
+                                    {% if review.user.first_name and review.user.last_name %}
+                                        {{ review.user.first_name }} {{ review.user.last_name|slice:"0:1"}}.
+                                    {% elif review.user.first_name and not review.user.last_name %}
+                                        {{ review.user.first_name }}
+                                    {% else %}
+                                        {{review.user.username}}
+                                    {% endif %}
+                                </a>
+                                <span class="text-muted small ms-auto">
+                                    {{ review.created_at|date:"d/m/Y H:i" }}
+                                </span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="review-stars">
+                                    {% for i in '12345' %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <i class="bi bi-star-fill text-warning"></i>
+                                        {% else %}
+                                            <i class="bi bi-star text-warning"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </span>
+                            </div>
+                            <p class="mb-2">{{ review.comment }}</p>
+                            {% if review.user == request.user %}
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ review.id }}">
+                                    <i class="bi bi-trash"></i> Excluir
+                                </button>
+                                <div class="modal fade" id="deleteModal-{{ review.id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ review.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title" id="deleteModalLabel-{{ review.id }}">Confirmar Exclusão de Comentário</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Tem certeza que deseja excluir este comentário?</p>
+                                                <p class="text-danger"><i class="bi bi-info-circle"></i> Esta ação não pode ser desfeita!</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <form method="POST" action="{% url 'review_delete' review.id %}" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="bi bi-trash"></i> Sim, Excluir
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        {% endfor %}
+                    {% endif %}
+                        <p class="text-muted">Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                    <hr>
                     {% if request.user.is_authenticated %}
-                    <form method="POST" enctype="multipart/form-data" id="reviewForm" action="{% url 'review_create' recipe.id %}">
+                    <form class="" method="POST" enctype="multipart/form-data" id="reviewForm" action="{% url 'review_create' recipe.id %}">
                         {% csrf_token %}
-                        <!-- TODO recipe review form -->
-                        <label for="{{review_form.comment.id_for_label}}">{{ review_form.comment.label }}</label>
-                        {{review_form.comment}}
+                        {% for message in messages %}
+                            {% if message.tags == 'success' %}
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% elif message.tags == 'error' %}
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Avaliação</label>
+                            <div class="difficulty-badge" id="rating-stars">
+                                {% for i in "12345" %}
+                                    <input type="radio" name="rating" id="rating{{ i }}" value="{{ i }}" class="d-none"
+                                        {% if review_form.rating.value|stringformat:"s" == i %}checked{% endif %}>
+                                    <label for="rating{{ i }}" style="cursor:pointer;">
+                                        <i class="bi {% if review_form.rating.value|stringformat:"s" >= i %}bi-star-fill{% else %}bi-star{% endif %} text-warning fs-4 me-1" data-star="{{ i }}"></i>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const stars = document.querySelectorAll('#rating-stars label i');
+                                const radios = document.querySelectorAll('#rating-stars input[type="radio"]');
+                                radios[4].checked = true;
+                                stars.forEach((star, idx) => {
+                                    star.addEventListener('click', function() {
+                                        radios[idx].click();
+                                        radios[idx].checked = true;
+                                        stars.forEach((s, i) => {
+                                            if (i <= idx) {
+                                                s.classList.add('bi-star-fill');
+                                                s.classList.remove('bi-star');
+                                            } else {
+                                                s.classList.add('bi-star');
+                                                s.classList.remove('bi-star-fill');
+                                            }
+                                        });
+                                    });
+                                });
+                            });
+                            </script>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ review_form.comment.id_for_label }}" class="form-label fw-semibold">Comentário</label>
+                            {{ review_form.comment }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Enviar Avaliação
+                        </button>
                     </form>
+                    {% else %}
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle"></i>
+                        <a href="{% url 'login' %}">Entre</a> para deixar um comentário.
+                    </div>
                     {% endif %}
                 </div>
             </div>
-            {% endif %}
         </div>
         
         <!-- Sidebar -->
@@ -200,29 +303,39 @@
                 <!-- Action Buttons -->
                 {% if request.user.is_authenticated %}
                     {% if request.user == recipe.creator or request.user.is_staff %}
-                    <a href="{% url 'editRecipe' recipe.id %}" class="btn btn-warning btn-action mb-3">
-                        <i class="bi bi-pencil"></i> Editar Receita
-                    </a>
                     <button type="button" class="btn btn-danger btn-action mb-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
                         <i class="bi bi-trash"></i> Excluir Receita
                     </button>
+                    {% elif request.user == recipe.creator %}
+                    <a href="{% url 'recipe_edit' recipe.id %}" class="btn btn-warning btn-action mb-3">
+                        <i class="bi bi-pencil"></i> Editar Receita
+                    </a>
                     {% endif %}
                     
-                    <button class="btn btn-outline-danger btn-action mb-3">
-                        <i class="bi bi-heart"></i> Salvar nos Favoritos
-                    </button>
-                    <button class="btn btn-outline-primary btn-action mb-3" id="shareBtn">
-                        <i class="bi bi-share"></i> Compartilhar
-                    </button>
-                    <button class="btn btn-outline-success btn-action mb-3" onclick="window.print()">
-                        <i class="bi bi-printer"></i> Imprimir
-                    </button>
+                    <form method="POST" action="{% url 'favorite_toggle' recipe.id %}">
+                        {% csrf_token %}
+                        {% if request.user in recipe.favorited_by.all %}
+                        <button class="btn btn-danger btn-action mb-3">
+                            <i class="bi bi-heart-fill"></i> Remover dos Favoritos
+                        </button>
+                        {% else %}
+                        <button class="btn btn-outline-danger btn-action mb-3">
+                            <i class="bi bi-heart"></i> Salvar nos Favoritos
+                        </button>
+                        {% endif %}
+                    </form>
                 {% else %}
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle"></i>
                         <a href="{% url 'login' %}">Entre</a> para salvar e interagir com esta receita.
                     </div>
                 {% endif %}
+                <button class="btn btn-outline-primary btn-action mb-3" id="shareBtn">
+                    <i class="bi bi-share"></i> Compartilhar
+                </button>
+                <button class="btn btn-outline-success btn-action mb-3" onclick="window.print()">
+                    <i class="bi bi-printer"></i> Imprimir
+                </button>
                 
                 <!-- Recipe Info -->
                 <div class="card mt-3">

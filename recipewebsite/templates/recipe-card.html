@@ -19,18 +19,17 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-                <!--
-                TODO user this layout for reviews
-                <div class="recipe-difficulty">
-                    Dificuldade
-                    <br>
-                    
-                    <i class="bi {% if recipe.difficulty >= 1 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                    <i class="bi {% if recipe.difficulty >= 2 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                    <i class="bi {% if recipe.difficulty >= 3 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                    <i class="bi {% if recipe.difficulty >= 4 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                    <i class="bi {% if recipe.difficulty >= 5 %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                </div>-->
+                
+                <div class="recipe-reviews">
+                    Avaliacoes
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= recipe.average_rating %}
+                            <i class="bi bi-star-fill difficulty-star"></i>
+                        {% else %}
+                            <i class="bi bi-star difficulty-star empty"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
                 <div class="recipe-duration">
                     <i class="bi bi-clock"></i> {{ recipe.duration }} Minutos
                 </div>
