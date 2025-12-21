@@ -152,7 +152,7 @@
                     
                     {% if reviews %}
                         {% for review in reviews %}
-                        <div class="border-bottom pb-3 mb-3">
+                        <div class="pb-3 mb-3">
                             <div class="d-flex align-items-center mb-2">
                                 <a href="{% url 'profile' review.user.id %}" class="fw-semibold text-decoration-none me-2">
                                     {% if review.user.first_name and review.user.last_name %}
@@ -274,7 +274,7 @@
                         </button>
                     </form>
                     {% else %}
-                    <div class="alert alert-info mt-3">
+                    <div class=" mt-3">
                         <i class="bi bi-info-circle"></i>
                         <a href="{% url 'login' %}">Entre</a> para deixar um comentário.
                     </div>
@@ -327,7 +327,7 @@
                         {% endif %}
                     </form>
                 {% else %}
-                    <div class="alert alert-info">
+                    <div class="alert-info">
                         <i class="bi bi-info-circle"></i>
                         <a href="{% url 'login' %}">Entre</a> para salvar e interagir com esta receita.
                     </div>

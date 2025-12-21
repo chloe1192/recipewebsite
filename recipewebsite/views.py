@@ -449,7 +449,7 @@ def user_account(request):
         'socials': socials,
         'paginator': paginator
     }
-    return render(request, 'account.html', context)
+    return render(request, 'profile.html', context)
 
 
 @login_required(login_url='/login')

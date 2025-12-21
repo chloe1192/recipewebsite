@@ -5,7 +5,7 @@
 
     <div class="row">
         {% if page == 'login' %}
-        <form class="form form-signin" method="POST" action="">
+        <form class="form form-signin" method="POST" action="" onsubmit="passwordInputChangeBeforeSubmit()">
             {% csrf_token %}
             {% for message in messages %}
                 <div class="alert alert-danger">
@@ -20,6 +20,9 @@
             <div class="form-group">
                 <label for="password">Senha</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Senha">
+                <span class="password-show-toggle" onclick="passwordShowToggle()">
+                    <i class="bi bi-eye"></i>
+                </span>
             </div>
             <div class="form-group py-2">
                 <button type="submit" class="btn btn-primary">Entrar</button>

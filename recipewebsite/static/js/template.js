@@ -307,3 +307,22 @@ window.recipeWebsite = {
     showToast,
     printRecipe
 };
+
+
+function passwordShowToggle() {
+    const passInput = document.getElementById('password');
+    console.log(passInput)
+    if (passInput.type === 'password') {
+        passInput.type = 'text'
+    } 
+    else {
+        passInput.type = 'password'
+    }
+}
+
+function passwordInputChangeBeforeSubmit() {
+    const passInput = document.getElementById('password')
+    if (passInput.type === 'text') {
+        passInput.type = 'password'
+    }
+}

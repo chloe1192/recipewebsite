@@ -1,5 +1,8 @@
 /* ============ GLOBAL STYLES ============ */
 
+$small: 768px;
+$medium: 1024px;
+
 :root {
     --primary-color: #ff6b6b;
     --secondary-color: #4ecdc4;
@@ -30,6 +33,22 @@ body {
     line-height: 1.6;
 }
 
+.form {
+
+    .password-show-toggle {
+        float: right;
+        margin-right: 10px;
+        margin-top: -40px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .password-show-toggle:hover,
+    .password-show-toggle:focus {
+        color: var(--primary-color);
+    }
+}
+
 /* ============ SCROLLBAR ============ */
 ::-webkit-scrollbar {
     width: 10px;
@@ -46,6 +65,15 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #ff5252;
+}
+
+@media only screen and (max-width: $medium) {
+    .navbar {
+
+        .search-form-header {
+            margin-top: 15px;
+        }
+    }
 }
 
 /* ============ CARDS ============ */
@@ -174,7 +202,8 @@ body {
         font-weight: bold;
     }
     .recipe-difficulty,
-    .recipe-duration {
+    .recipe-duration,
+    .recipe-reviews {
         color: var(--dark-color);
         font-size: 1rem;
     }
@@ -184,8 +213,45 @@ body {
         font-size: 1rem !important;
         color: var(--primary-color);
     }
-}
 
+    .recipe-title {
+        font-size: 22px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .recipe-difficulty,
+    .recipe-duration,
+    .recipe-reviews {
+        display: block;
+        float: left;
+        padding-left: 5px;
+        padding-right: 5px;
+        width: 50%;
+        .bi-mortarboard {
+            color: var(--light-gray);
+        }
+        .bi-mortarboard-fill {
+            color: var(--dark-color);
+        }
+    }
+}
+@media only screen and (max-width: $medium) {
+    
+    .recipe-card {
+
+        .recipe-difficulty{
+            width: 100%;
+        }
+        .recipe-reviews{
+            width: 100%;
+        }
+        .recipe-duration{
+            width: 100%;
+        }
+    }
+
+}
 .step-number {
     width: 35px !important;
     height: 35px !important;
@@ -329,7 +395,7 @@ body {
 
 * {
     a {
-        color: inherit;
+        color: var(--primary-color);
         text-decoration: none;
     }
 }
@@ -390,27 +456,6 @@ ul {
     }
 }
 /* Content */
-
-.recipe-title {
-    font-size: 22px;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.recipe-difficulty,
-.recipe-duration {
-    display: block;
-    float: left;
-    padding-left: 5px;
-    padding-right: 5px;
-    width: 50%;
-    .bi-mortarboard {
-        color: var(--light-gray);
-    }
-    .bi-mortarboard-fill {
-        color: var(--dark-color);
-    }
-}
 
 /* Recipe content */
 .recipe-card-col {
