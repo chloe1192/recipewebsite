@@ -88,6 +88,11 @@ body {
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* FORMS */
+[id$="-DELETE"] {
+    display: none;
+}
+
 /* ============ BUTTONS ============ */
 .btn {
     border-radius: 8px;
@@ -510,6 +515,15 @@ ul {
     max-width: 650px;
 }
 
+.login-page,
+.register-page {
+
+    .row {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+}
+.form-signin,
 .form-signup {
     max-width: 650px;
 }
