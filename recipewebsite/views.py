@@ -429,30 +429,13 @@ def user_delete(request, pk):
 
 @login_required(login_url='/login')
 def user_account(request):
-    """Display current user's account page with their recipes.
-    
-    Requires authentication.
-    
-    Args:
-        request: HTTP request
-    
-    Returns:
-        Rendered account.html with user data and paginated recipes
-    """
     user = request.user
     socials = SocialMedia.objects.filter(user=user)
-    recipes_list = Recipe.objects.filter(creator=user).select_related('category', 'creator')
-    paginator = Paginator(recipes_list, PAGE_SIZE)
-    page = request.GET.get('page', 1)
-    try:
-        recipes = paginator.page(page)
-    except (EmptyPage, PageNotAnInteger):
-        recipes = paginator.page(1)
+    recipes = Recipe.objects.filter(creator=user)
     context = {
         'recipes': recipes,
         'user': user,
-        'socials': socials,
-        'paginator': paginator
+        'socials': socials
     }
     return render(request, 'profile.html', context)
 
@@ -516,6 +499,7 @@ def user_detail(request, pk):
     print(user.last_name)
     context = {}
     recipes = Recipe.objects.filter(creator=user, is_approved=True)
+    print(recipes.count)
     socials = SocialMedia.objects.filter(user=user)
     context = {
         'user': user,
