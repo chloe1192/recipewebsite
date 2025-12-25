@@ -248,7 +248,12 @@ def recipe_update(request, pk):
             logger.error(f"Form errors: {form.errors}")
             logger.error(f"Ingredients errors: {ingredients_formset.errors}")
             logger.error(f"Steps errors: {steps_formset.errors}")
-            messages.error(request, "There are some errors in the form")
+            for key, value in form.errors.items():
+                messages.error(request, value)
+            for key, value in ingredients_formset.errors.items():
+                messages.error(request, value)
+            for key, value in steps_formset.errors.items():
+                messages.error(request, value)
     else:
         form = CreateRecipeForm(instance=recipe)
         ingredients_formset = IngredientsFormSet(instance=recipe, prefix='ingredients')
@@ -543,9 +548,11 @@ def password_change(request):
 def review_create(request, pk):
     recipe = Recipe.objects.get(pk=pk)
     if request.method == 'POST':
+        if request.user == recipe.creator:
+            messages.error(request, 'Voce nao pode avaliar sua propria receita')
+            return redirect('/recipe/' + str(recipe.id))
         form = ReviewForm(request.POST)
         if form.is_valid():
-            print(form)
             review = form.save(commit=False)
             review.user = request.user
             review.recipe = recipe
