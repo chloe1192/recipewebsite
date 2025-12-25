@@ -361,6 +361,11 @@ body {
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
+
+    .search-button {
+        margin: 0 !important;
+    }
+
     .recipe-hero {
         height: 300px !important;
     }
