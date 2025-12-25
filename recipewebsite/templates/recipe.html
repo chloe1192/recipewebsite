@@ -308,7 +308,8 @@
                     <button type="button" class="btn btn-danger btn-action mb-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
                         <i class="bi bi-trash"></i> Excluir Receita
                     </button>
-                    {% elif request.user == recipe.creator %}
+                    {% endif %}
+                    {% if request.user == recipe.creator %}
                     <a href="{% url 'recipe_edit' recipe.id %}" class="btn btn-warning btn-action mb-3">
                         <i class="bi bi-pencil"></i> Editar Receita
                     </a>
