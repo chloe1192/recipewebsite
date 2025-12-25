@@ -29,24 +29,20 @@
 
 			<div class="mb-3">
 				<label for="{{ form.img.id_for_label }}" class="form-label">Imagem</label>
-				{% if form.img.value %}
-					<p>Atual: <a href="{{ form.img.value.url }}">{{ form.img.value.name }}</a></p>
-					{% endif %}
-					{{ form.img|add_class:"form-control" }}
-					{% if form.img.errors %}
-						<div class="invalid-feedback d-block">{{ form.img.errors|striptags }}</div>
-					{% endif %}
+				<br>
+				{{ form.img|add_class:"form-control" }}
+				{% if form.img.errors %}
+					<div class="invalid-feedback d-block">{{ form.img.errors|striptags }}</div>
+				{% endif %}
 				</div>
 
 			<div class="mb-3">
 				<label for="{{ form.sliderImg.id_for_label }}" class="form-label">Imagem Slider</label>
-				{% if form.sliderImg.value %}
-					<p>Atual: <a href="{{ form.sliderImg.value.url }}">{{ form.sliderImg.value.name }}</a></p>
-					{% endif %}
-					{{ form.sliderImg|add_class:"form-control" }}
-					{% if form.sliderImg.errors %}
-						<div class="invalid-feedback d-block">{{ form.sliderImg.errors|striptags }}</div>
-					{% endif %}
+				<br>
+				{{ form.sliderImg|add_class:"form-control" }}
+				{% if form.sliderImg.errors %}
+					<div class="invalid-feedback d-block">{{ form.sliderImg.errors|striptags }}</div>
+				{% endif %}
 				</div>
 
 			<div class="mb-3">
@@ -102,9 +98,6 @@
 		<div class="card mb-4 shadow-sm">
 			<div class="card-header d-flex justify-content-between align-items-center">
 				<h4 class="mb-0">Ingredientes</h4>
-				<button type="button" id="add-ingredients" class="btn btn-outline-primary btn-sm">
-					<i class="bi bi-plus-lg"></i> Adicionar Ingrediente
-				</button>
 			</div>
 			<div class="card-body" id="ingredients-formset">
 				{{ ingredients_formset.management_form }}
@@ -120,6 +113,7 @@
 						{% for form in ingredients_formset %}
 							<tr class="sortable-row">
 								{{ form.id }}
+								{{ form.DELETE}}
 								<td class="handle" style="cursor: grab">⬍ {{ form.text|add_class:"form-control" }}</td>
 								<td>{{ form.sequence|add_class:"form-control"|attr:"readonly:true" }}</td>
 							<td>
@@ -145,15 +139,17 @@
 					</tr>
 				</template>
 			</div>
+			<div class="card-footer">
+				<button type="button" id="add-ingredients" class="btn btn-outline-primary btn-sm">
+					<i class="bi bi-plus-lg"></i> Adicionar Ingrediente
+				</button>
+			</div>
 		</div>
 
 		<!-- === Steps === -->
 		<div class="card mb-4 shadow-sm">
 			<div class="card-header d-flex justify-content-between align-items-center">
 				<h4 class="mb-0">Passos</h4>
-				<button type="button" id="add-steps" class="btn btn-outline-primary btn-sm">
-					<i class="bi bi-plus-lg"></i> Adicionar Passo
-				</button>
 			</div>
 			<div class="card-body" id="steps-formset">
 				{{ steps_formset.management_form }}
@@ -169,6 +165,7 @@
 						{% for form in steps_formset %}
 							<tr class="sortable-row">
 								{{ form.id }}
+								{{ form.DELETE }}
 								<td class="handle" style="cursor: grab">⬍ {{ form.text|add_class:"form-control" }}</td>
 								<td>{{ form.sequence|add_class:"form-control" }}</td>
 								<td>
@@ -193,6 +190,11 @@
 						</td>
 					</tr>
 				</template>
+			</div>
+			<div class="card-footer">
+				<button type="button" id="add-steps" class="btn btn-outline-primary btn-sm">
+					<i class="bi bi-plus-lg"></i> Adicionar Passo
+				</button>
 			</div>
 		</div>
 
@@ -280,9 +282,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const rows = document.querySelectorAll(`#${prefix}-table tbody tr`);
     rows.forEach(row => {
       const textarea = row.querySelector('textarea[name$="text"]');
-      const deleteInput = row.querySelector('input[name$="DELETE"]');
+		console.log(textarea)
+      const deleteInput = row.querySelector('.remove-form');
 	  console.log(deleteInput);
       if (textarea && deleteInput && textarea.value.trim() === "") {
+		console.log(textarea)
+		textarea.closest("tr")?.remove();
+		updateSequencesForTable("#ingredients-table");
+		updateSequencesForTable("#steps-table");
         deleteInput.checked = true; // Mark the form for deletion
       }
     });
